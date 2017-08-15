@@ -18,8 +18,6 @@ function links(keyword) {
             let res =  { name: keyword, children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8) };
             if (res.children.length < 8) res = { name: keyword, children: disambiguation($, HTML).slice(0, 8) };
 
-            console.log(res);
-
             return res;
         })
 }
