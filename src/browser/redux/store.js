@@ -1,6 +1,7 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
+import axios from "axios"
 
 /* ------------------------- ACTION -------------------------- */
 const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
@@ -16,8 +17,8 @@ const reducer = (knowledge = {}, action) => {
     return newKnowledge
 }
 /* ------------------------- THUNKS ------------------------- */
-export const fetch = query => dispatch => {
-    axios.post('/query', query)
+export const search = query => dispatch => {
+    axios.post('/query', { query: query })
         .then(concepts => {
             dispatch(update(concepts.data))
         }).catch(console.error)
