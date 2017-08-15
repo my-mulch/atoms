@@ -5,10 +5,10 @@ import DataCircles from './DataCircles';
 
 export default ({ graph }) => {
 
-  const center = { cx: 1000, cy: 1000, r: 400 };
+  const center = { cx: 1000, cy: 1000, r: 200 };
 
   return (
-    <svg width={2000} height={2000}>
+    <svg width={8000} height={8000}>
       <circle {...center} />
       <DataCircles {...graph} />
     </svg>
