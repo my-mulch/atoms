@@ -1,27 +1,39 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
 
+function sanitizeQuery(query) {
+    return axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
+        .then(wbpage => wbpage.data)
+        .then(data => data.query.search[0].title)
+}
+
 function links(keyword) {
 
-    let HTML = '';
-    let keywordStr = keyword;
     if (keyword.includes(' ')) {
-        keywordStr = keyword.split(' ').join('_')
+        keyword = keyword.split(' ').join('+');
     }
 
-    return axios.get(`https://en.wikipedia.org/wiki/${keywordStr.toLowerCase()}`)
+    const query = sanitizeQuery(keyword)
+
+    return query.then(text => {
+        axios.get(`https://en.wikipedia.org/wiki/${text}`)
         .then(wbpage => {
 
-            HTML = wbpage.data;
+            let HTML = wbpage.data;
             const $ = cheerio.load(HTML);
 
-            let res =  { name: keyword, children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8) };
-            if (res.children.length < 8) res = { name: keyword, children: disambiguation($, HTML).slice(0, 8) };
-
-            console.log(res);
+            let res = {
+                name: keyword.replace(/\+/g, ' '),
+                children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
+            };
+            if (res.children.length < 8) res = {
+                name: keyword.replace(/\+/g, ' '),
+                children: disambiguation($, HTML).slice(0, 8)
+            };
 
             return res;
         })
+    })
 }
 
 function first_p_links($, HTML) {
@@ -42,7 +54,7 @@ function all_links($, HTML) {
     return formatFilter(links, HTML);
 }
 
-function disambiguation ($, HTML) {
+function disambiguation($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
@@ -52,10 +64,10 @@ function disambiguation ($, HTML) {
     return formatFilter(links, HTML, 'disambiguation');
 }
 
-function formatFilter (link_set, HTML, type) {
+function formatFilter(link_set, HTML, type) {
     const arrObjs = Array.from(link_set).map(link => {
         const name = link.slice(6).replace(/_/g, ' ');
-        return { name, link }
+        return {name, link}
     })
         .filter(sorted_arr_obj => !(/#|:|.org|.php/g).test(sorted_arr_obj.link));
 
@@ -75,7 +87,5 @@ function create_arr_objs(arrObjs, HTML) {
         })
         .sort((a, b) => b.numOccur - a.numOccur);
 }
-
-links('*');
 
 module.exports = links;
