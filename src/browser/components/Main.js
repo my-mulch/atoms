@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import Chart from './Chart'
 
 class App extends Component {
   render() {
@@ -65,6 +66,7 @@ class App extends Component {
                                 <a className="hvr-icon-wobble-vertical wow slideInRight" data-wow-delay="3.5s" href="#"><i className="fa fa-fw fa-instagram"></i></a>
                             </li>
                         </ul>
+                        <Chart />
                     </div>
                 </div>
             </div>
