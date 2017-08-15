@@ -13,6 +13,5 @@ export default ({ graph }) => {
       <DataCircles {...graph} />
     </svg>
   )
-
 }
 

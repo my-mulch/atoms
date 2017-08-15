@@ -13,7 +13,7 @@ const update = concepts => ({ type: UPDATE, concepts })
 const reducer = (knowledge = {}, action) => {
     const newKnowledge = Object.assign({}, knowledge)
     if (action.type === UPDATE)
-        return Object.assign({}, action.concepts)
+        newKnowledge = Object.assign({}, action.concepts)
     return newKnowledge
 }
 /* ------------------------- THUNKS ------------------------- */
