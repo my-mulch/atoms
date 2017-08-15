@@ -1,19 +1,21 @@
 import React from 'react';
 
-const renderCircles = (props) => {
-    return (coords, index) => {
-        const circleProps = {
-            cx: props.height / 2,
-            cy: props.width / 2,
-            r: 30,
-            key: index
-        };
-        return <circle {...circleProps} />;
-    };
-};
+export default (graph) => {
+    return (
+        <g>
+            {
+                graph.children && graph.children.map((concept, index) => {
 
-export default (props) => {
-    return <g>{props.data.map((point, index) => {
-        return renderCircles(props)(point, index)
-    })}</g>
+                    const pos = {
+                        cx: 1200 - Math.floor(Math.random() * 1200),
+                        cy: 1200 - Math.floor(Math.random() * 1200),
+                        r: Math.floor(Math.random() * 200),
+                        key: index
+                    };
+
+                    return <circle {...pos} />
+                })
+            }
+        </g>
+    )
 }
