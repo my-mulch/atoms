@@ -40,7 +40,7 @@ function all_links($, HTML) {
     return formatFilter(links, HTML);
 }
 
-function disambiguation ($, HTML) {
+function disambiguate ($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
