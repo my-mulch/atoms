@@ -28,7 +28,7 @@ function links(keyword) {
             };
             if (res.children.length < 8) res = {
                 name: keyword.replace(/\+/g, ' '),
-                children: disambiguation($, HTML).slice(0, 8)
+                children: disambiguate($, HTML).slice(0, 8)
             };
 
             return res;
@@ -54,7 +54,8 @@ function all_links($, HTML) {
     return formatFilter(links, HTML);
 }
 
-function disambiguation($, HTML) {
+
+function disambiguate ($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
