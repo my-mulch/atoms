@@ -16,23 +16,23 @@ function links(keyword) {
     const query = sanitizeQuery(keyword)
 
     return query.then(text => {
-        axios.get(`https://en.wikipedia.org/wiki/${text}`)
-        .then(wbpage => {
+        return axios.get(`https://en.wikipedia.org/wiki/${text}`)
+            .then(wbpage => {
 
-            let HTML = wbpage.data;
-            const $ = cheerio.load(HTML);
+                let HTML = wbpage.data;
+                const $ = cheerio.load(HTML);
 
-            let res = {
-                name: keyword.replace(/\+/g, ' '),
-                children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
-            };
-            if (res.children.length < 8) res = {
-                name: keyword.replace(/\+/g, ' '),
-                children: disambiguate($, HTML).slice(0, 8)
-            };
+                let res = {
+                    name: keyword.replace(/\+/g, ' '),
+                    children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
+                };
+                if (res.children.length < 8) res = {
+                    name: keyword.replace(/\+/g, ' '),
+                    children: disambiguate($, HTML).slice(0, 8)
+                };
 
-            return res;
-        })
+                return res;
+            })
     })
 }
 
@@ -55,7 +55,7 @@ function all_links($, HTML) {
 }
 
 
-function disambiguate ($, HTML) {
+function disambiguate($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
@@ -68,7 +68,7 @@ function disambiguate ($, HTML) {
 function formatFilter(link_set, HTML, type) {
     const arrObjs = Array.from(link_set).map(link => {
         const name = link.slice(6).replace(/_/g, ' ');
-        return {name, link}
+        return { name, link }
     })
         .filter(sorted_arr_obj => !(/#|:|.org|.php/g).test(sorted_arr_obj.link));
 
