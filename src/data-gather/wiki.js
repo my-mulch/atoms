@@ -99,6 +99,6 @@ function create_arr_objs(arrObjs, HTML) {
         .sort((a, b) => b.numOccur - a.numOccur);
 }
 
-links('the money team')
+// links('Kush ups')
 
 module.exports = links;
