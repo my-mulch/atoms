@@ -29,10 +29,9 @@ let live = false
 
 
 const Force = ({ graph }) => {
-
     if (!Object.keys(graph).length) return null
 
-    const center = { id: graph.name.toLowerCase, group: 0, label: graph.name.toUpperCase(), level: 1 }
+    const center = { id: graph.name.toLowerCase(), group: 0, label: graph.name.toUpperCase(), level: 1 }
 
     graph.children.forEach(concept => {
 
@@ -89,6 +88,9 @@ const Force = ({ graph }) => {
     // to trigger the initial render
     updateSimulation()
     live = true
+
+    baseNodes = []
+    baseLinks = []
     return null
 }
 
@@ -258,6 +260,6 @@ function updateSimulation() {
     simulation.alphaTarget(0.7).restart()
 }
 
-const mapProps = knowledge => ({ graph: knowledge })
+const mapProps = store => ({ graph: store.graph })
 const mapDispatch = null
 export default connect(mapProps, mapDispatch)(Force)
