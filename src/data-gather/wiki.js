@@ -4,7 +4,10 @@ const cheerio = require("cheerio")
 function sanitizeQuery(query) {
     return axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
         .then(wbpage => wbpage.data)
-        .then(data => data.query.search[0].title)
+        .then(data => {
+            console.log(data.query.search[0].title);
+            return data.query.search[0].title
+        })
 }
 
 function links(keyword) {
@@ -16,20 +19,27 @@ function links(keyword) {
     const query = sanitizeQuery(keyword)
 
     return query.then(text => {
-        axios.get(`https://en.wikipedia.org/wiki/${text}`)
+        return axios.get(`https://en.wikipedia.org/wiki/${text}`)
         .then(wbpage => {
 
             let HTML = wbpage.data;
             const $ = cheerio.load(HTML);
 
+            const name = text
+            // let children = Array.from(first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8));
+            let children = all_links($, HTML).slice(0, 8);
+
             let res = {
-                name: keyword.replace(/\+/g, ' '),
-                children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
-            };
+                name: name,
+                children: children
+            }
+
             if (res.children.length < 8) res = {
-                name: keyword.replace(/\+/g, ' '),
+                name: name,
                 children: disambiguate($, HTML).slice(0, 8)
             };
+
+            console.log(res)
 
             return res;
         })
@@ -39,7 +49,7 @@ function links(keyword) {
 function first_p_links($, HTML) {
     const links = new Set();
     $('p').first().find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML);
@@ -48,7 +58,7 @@ function first_p_links($, HTML) {
 function all_links($, HTML) {
     const links = new Set();
     $('p').find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML);
@@ -59,7 +69,7 @@ function disambiguate ($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML, 'disambiguation');
@@ -88,5 +98,7 @@ function create_arr_objs(arrObjs, HTML) {
         })
         .sort((a, b) => b.numOccur - a.numOccur);
 }
+
+links('the money team')
 
 module.exports = links;

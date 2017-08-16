@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/query', (req, res, next) => {
     wikiScan(req.body.query)
         .then(concepts => {
+            console.log(concepts);
             res.json(concepts)
         }).catch(next)
 })
