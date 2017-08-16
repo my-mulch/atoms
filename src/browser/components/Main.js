@@ -1,31 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react'
 import { connect } from 'react-redux';
-import axios from 'axios'
+import { search } from '../redux/concepts'
+import { getSuggestions } from '../redux/suggestions'
 import Force from './Force'
-import { search } from '../redux/store'
 
-const App = ({ search }) => (
+
+const Main = ({ search, getSuggestions, suggestions }) => (
     <div className="wrapper" id="wrapper-large">
         <div className="container-fluid">
-            <h1 className="wow flipInY" data-wow-delay="1.5s">AtomizeThis</h1>
+            <h1 className="wow flipInY" data-wow-delay="1.5s">Atomizer</h1>
 
             <form
                 className="form-inline search-form"
-                onSubmit={evt => { evt.preventDefault(); search(evt.target.query.value) }}>
+                onSubmit={evt => { evt.preventDefault(); search(evt.target.query.value) }}
+                onChange={evt => { evt.preventDefault(); getSuggestions(evt.target.value) }}
+            >
                 <div className="input-group">
                     <span className="input-group-btn">
                         <input name="query" className="form-control" placeholder=" search product"></input>
                     </span>
                 </div>
             </form>
-
+            {
+                suggestions && suggestions.map((suggestion, index) => {
+                    return <li key={index}>{suggestion}</li>
+                })
+            }
             <Force />
         </div>
     </div>
 )
 
 
-const mapState = null
-const mapDispatch = { search }
+const mapState = ( { suggestions_reducer } ) => ({ suggestions: suggestions_reducer })
+const mapDispatch = { search, getSuggestions }
 
-export default connect(mapState, mapDispatch)(App);
+export default connect(mapState, mapDispatch)(Main);

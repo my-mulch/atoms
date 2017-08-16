@@ -4,7 +4,10 @@ const cheerio = require("cheerio")
 function sanitizeQuery(query) {
     return axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
         .then(wbpage => wbpage.data)
-        .then(data => data.query.search[0].title)
+        .then(data => {
+            console.log(data.query.search[0].title);
+            return data.query.search[0].title
+        })
 }
 
 function links(keyword) {
@@ -17,29 +20,37 @@ function links(keyword) {
 
     return query.then(text => {
         return axios.get(`https://en.wikipedia.org/wiki/${text}`)
-            .then(wbpage => {
+        .then(wbpage => {
 
-                let HTML = wbpage.data;
-                const $ = cheerio.load(HTML);
+            let HTML = wbpage.data;
+            const $ = cheerio.load(HTML);
 
-                let res = {
-                    name: keyword.replace(/\+/g, ' '),
-                    children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
-                };
-                if (res.children.length < 8) res = {
-                    name: keyword.replace(/\+/g, ' '),
-                    children: disambiguate($, HTML).slice(0, 8)
-                };
+            const name = text
+            // let children = Array.from(first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8));
+            let children = all_links($, HTML).slice(0, 8);
 
-                return res;
-            })
+            let res = {
+                name: name,
+                children: children
+            }
+
+            if (res.children.length < 8) res = {
+                name: name,
+                children: disambiguate($, HTML).slice(0, 8)
+            };
+
+            console.log(res)
+
+            return res;
+        })
+
     })
 }
 
 function first_p_links($, HTML) {
     const links = new Set();
     $('p').first().find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML);
@@ -48,7 +59,7 @@ function first_p_links($, HTML) {
 function all_links($, HTML) {
     const links = new Set();
     $('p').find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML);
@@ -59,7 +70,7 @@ function disambiguate($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
-        links.add(n.attribs.href);
+        if (n.attribs.href) links.add(n.attribs.href);
     });
 
     return formatFilter(links, HTML, 'disambiguation');
