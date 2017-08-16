@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
-import Chart from './Chart'
+import Force from './Force'
 import { search } from '../redux/store'
 
 const App = ({ search }) => (
@@ -19,7 +19,7 @@ const App = ({ search }) => (
                 </div>
             </form>
 
-            <Chart />
+            <Force />
         </div>
     </div>
 )
