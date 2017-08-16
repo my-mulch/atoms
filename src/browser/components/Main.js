@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import Chart from './Chart'
 import { search } from '../redux/concepts'
 import { getSuggestions } from '../redux/suggestions'
+import Force from './Force'
+
 
 const Main = ({ search, getSuggestions, suggestions }) => (
     <div className="wrapper" id="wrapper-large">
@@ -25,7 +26,7 @@ const Main = ({ search, getSuggestions, suggestions }) => (
                     return <li key={index}>{suggestion}</li>
                 })
             }
-            <Chart />
+            <Force />
         </div>
     </div>
 )

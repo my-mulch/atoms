@@ -43,6 +43,7 @@ function links(keyword) {
 
             return res;
         })
+
     })
 }
 
@@ -65,7 +66,7 @@ function all_links($, HTML) {
 }
 
 
-function disambiguate ($, HTML) {
+function disambiguate($, HTML) {
 
     const links = new Set();
     $('ul').find('a').each((i, n) => {
@@ -78,7 +79,7 @@ function disambiguate ($, HTML) {
 function formatFilter(link_set, HTML, type) {
     const arrObjs = Array.from(link_set).map(link => {
         const name = link.slice(6).replace(/_/g, ' ');
-        return {name, link}
+        return { name, link }
     })
         .filter(sorted_arr_obj => !(/#|:|.org|.php/g).test(sorted_arr_obj.link));
 
@@ -98,7 +99,5 @@ function create_arr_objs(arrObjs, HTML) {
         })
         .sort((a, b) => b.numOccur - a.numOccur);
 }
-
-// links('Kush ups')
 
 module.exports = links;
