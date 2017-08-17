@@ -20,22 +20,30 @@ function links(keyword) {
 
     return query.then(text => {
         return axios.get(`https://en.wikipedia.org/wiki/${text}`)
-            .then(wbpage => {
+        .then(wbpage => {
 
-                let HTML = wbpage.data;
-                const $ = cheerio.load(HTML);
+            let HTML = wbpage.data;
+            const $ = cheerio.load(HTML);
 
-                let res = {
-                    name: keyword.replace(/\+/g, ' '),
-                    children: first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8)
-                };
-                if (res.children.length < 8) res = {
-                    name: keyword.replace(/\+/g, ' '),
-                    children: disambiguate($, HTML).slice(0, 8)
-                };
+            const name = text
+            // let children = Array.from(first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8));
+            let children = all_links($, HTML).slice(0, 8);
 
-                return res;
-            })
+            let res = {
+                name: name,
+                children: children
+            }
+
+            if (res.children.length < 8) res = {
+                name: name,
+                children: disambiguate($, HTML).slice(0, 8)
+            };
+
+            console.log(res)
+
+            return res;
+        })
+
     })
 }
 
@@ -91,7 +99,5 @@ function create_arr_objs(arrObjs, HTML) {
         })
         .sort((a, b) => b.numOccur - a.numOccur);
 }
-
-links('the money team')
 
 module.exports = links;

@@ -29,26 +29,29 @@ let live = false
 
 
 const Force = ({ graph }) => {
-
+    
     if (!Object.keys(graph).length) return null
 
-    const center = { id: graph.name.toLowerCase, group: 0, label: graph.name.toUpperCase(), level: 1 }
+    if(nodeGroup){
+        nodeGroup.remove()
+        textGroup.remove()
+        linkGroup.remove()
+    }
 
-    graph.children.forEach(concept => {
-
-        const normalizedConcept = concept.name.toLowerCase()
-        baseLinks.push({ target: center.id, source: normalizedConcept, strength: 0.01 })
-        baseNodes.push({ id: normalizedConcept, group: 0, label: concept.name, level: 2 })
+    graph.forEach((concept, group) => {
+        const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
+        concept.children.forEach(relation => {
+            baseLinks.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.1 })
+            baseNodes.push({ id: relation.name.toLowerCase(), group: 0, label: relation.name, level: 2 })
+        })
+        baseNodes.push(center)
     })
-
-    baseNodes.unshift(center)
 
     nodes = [...baseNodes]
     links = [...baseLinks]
 
     width = window.innerWidth
     height = window.innerHeight
-
 
     svg = d3.select('svg')
     svg.attr('width', width).attr('height', height)
@@ -67,7 +70,7 @@ const Force = ({ graph }) => {
     simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-120))
+        .force('charge', d3.forceManyBody().strength(-50))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     dragDrop = d3.drag().on('start', function (node) {
@@ -89,6 +92,9 @@ const Force = ({ graph }) => {
     // to trigger the initial render
     updateSimulation()
     live = true
+
+    baseNodes = []
+    baseLinks = []
     return null
 }
 
@@ -258,6 +264,6 @@ function updateSimulation() {
     simulation.alphaTarget(0.7).restart()
 }
 
-const mapProps = knowledge => ({ graph: knowledge })
+const mapProps = store => ({ graph: store.graph })
 const mapDispatch = null
 export default connect(mapProps, mapDispatch)(Force)

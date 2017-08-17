@@ -3,6 +3,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const wikiScan = require('../src/data-gather/wiki')
+const suggest = require('../src/data-gather/suggestions')
 const app = express()
 const path = require('path')
 const port = 3000
@@ -14,8 +15,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.post('/query', (req, res, next) => {
     wikiScan(req.body.query)
         .then(concepts => {
-            console.log(concepts);
             res.json(concepts)
+        }).catch(next)
+})
+
+app.post('/suggest', (req, res, next) => {
+    suggest(req.body.key)
+        .then(suggestions => {
+            res.send(suggestions)
         }).catch(next)
 })
 
