@@ -13,7 +13,7 @@ const Main = ({ search, getSuggestions, suggestions }) => (
             <form
                 className="form-inline search-form"
                 onSubmit={evt => { evt.preventDefault(); search(evt.target.query.value) }}
-                onChange={evt => { evt.preventDefault(); getSuggestions(evt.target.value) }}
+                // onChange={evt => { evt.preventDefault(); getSuggestions(evt.target.value) }}
             >
                 <div className="input-group">
                     <span className="input-group-btn">

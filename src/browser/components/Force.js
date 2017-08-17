@@ -31,23 +31,20 @@ let live = false
 const Force = ({ graph }) => {
     if (!Object.keys(graph).length) return null
 
-    const center = { id: graph.name.toLowerCase(), group: 0, label: graph.name.toUpperCase(), level: 1 }
-
-    graph.children.forEach(concept => {
-
-        const normalizedConcept = concept.name.toLowerCase()
-        baseLinks.push({ target: center.id, source: normalizedConcept, strength: 0.01 })
-        baseNodes.push({ id: normalizedConcept, group: 0, label: concept.name, level: 2 })
+    graph.forEach((concept, group) => {
+        const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
+        concept.children.forEach(relation => {
+            baseLinks.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.01 })
+            baseNodes.push({ id: relation.name.toLowerCase(), group: 0, label: relation.name, level: 2 })
+        })
+        baseNodes.push(center)
     })
-
-    baseNodes.unshift(center)
 
     nodes = [...baseNodes]
     links = [...baseLinks]
 
     width = window.innerWidth
     height = window.innerHeight
-
 
     svg = d3.select('svg')
     svg.attr('width', width).attr('height', height)
