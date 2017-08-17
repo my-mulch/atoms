@@ -29,10 +29,10 @@ let live = false
 
 
 const Force = ({ graph }) => {
-    
+
     if (!Object.keys(graph).length) return null
 
-    if(nodeGroup){
+    if (nodeGroup) {
         nodeGroup.remove()
         textGroup.remove()
         linkGroup.remove()
@@ -220,9 +220,7 @@ function updateGraph() {
         .attr('r', 10)
         .attr('fill', function (node) { return node.level === 1 ? 'red' : 'gray' })
         .call(dragDrop)
-        // we link the selectNode method here
-        // to update the graph on every click
-        .on('click', selectNode)
+        .on('click', () => { })
 
     nodeElements = nodeEnter.merge(nodeElements)
 
