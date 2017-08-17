@@ -41,7 +41,7 @@ const Force = ({ graph }) => {
     graph.forEach((concept, group) => {
         const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
         concept.children.forEach(relation => {
-            baseLinks.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.01 })
+            baseLinks.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.1 })
             baseNodes.push({ id: relation.name.toLowerCase(), group: 0, label: relation.name, level: 2 })
         })
         baseNodes.push(center)
@@ -70,7 +70,7 @@ const Force = ({ graph }) => {
     simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-120))
+        .force('charge', d3.forceManyBody().strength(-50))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     dragDrop = d3.drag().on('start', function (node) {
