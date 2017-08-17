@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 export function populate(graph) {
     const nodes = []
     const links = []
@@ -26,7 +28,7 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function simulate(simulation, nodeElements, textElements, linkElements) {
+export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links) {
 
     simulation.nodes(nodes).on('tick', () => {
         nodeElements
@@ -64,6 +66,8 @@ export function update(view) {
         node => node.id
     )
 
+    nodeEntry.call(view.dragDrop)
+
     let [textEntry, textElements] = domify(
         view.textGroup,
         view.nodes,
@@ -71,7 +75,7 @@ export function update(view) {
         'text',
         node => node.id)
 
-    textEnter.text(node => node.label)
+    textEntry.text(node => node.label)
 
     linkElements = linkEntry.merge(linkElements)
     nodeElements = nodeEntry.merge(nodeElements)
@@ -87,6 +91,7 @@ export function init(d3) {
     const svg = d3.select('svg')
     svg.attr('width', width).attr('height', height)
 
+    $('g').length ? $('g').remove() : null
     // we use svg groups to logically group the elements together
     const linkGroup = svg.append('g').attr('class', 'links')
     const nodeGroup = svg.append('g').attr('class', 'nodes')

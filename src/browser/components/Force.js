@@ -23,9 +23,9 @@ const Force = ({ graph, search }) => {
         linkForce, forces, dragDrop] = init(d3)
 
     const [nodes, links] = populate(graph)
-    // const [linkElements, nodeElements, textElements] = update({ linkGroup, nodeGroup, textGroup, nodes, links })
+    const [linkElements, nodeElements, textElements] = update({ linkGroup, nodeGroup, textGroup, nodes, links, dragDrop })
 
-    // simulate(forces, nodeElements, textElements, linkElements)
+    simulate(forces, nodeElements, textElements, linkElements, nodes, links)
     alive = true
     return null
 }
