@@ -29,7 +29,14 @@ let live = false
 
 
 const Force = ({ graph }) => {
+    
     if (!Object.keys(graph).length) return null
+
+    if(nodeGroup){
+        nodeGroup.remove()
+        textGroup.remove()
+        linkGroup.remove()
+    }
 
     graph.forEach((concept, group) => {
         const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
