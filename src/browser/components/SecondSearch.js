@@ -6,7 +6,7 @@ import { getSuggestions } from '../redux/suggestions'
 import Force from './Force'
 
 const SecondSearch = ({search, getSuggestions, suggestions}) => (
-    <div>
+    <div id="SecondSearch">
         <form
             autoComplete="off"
             className="form-inline search-form"
@@ -32,7 +32,6 @@ const SecondSearch = ({search, getSuggestions, suggestions}) => (
                 }
             </ul>
         </form>
-        <Force/>
     </div>
 )
 

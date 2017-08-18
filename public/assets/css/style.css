@@ -36,6 +36,7 @@ ul {
 
 	background: rgba(0, 0, 0, .5);
 	border: medium;
+	width: inherit;
 }
 
 li {
@@ -69,6 +70,10 @@ li:hover {
 #force {
 	height: 25em;
 	overflow: scroll;
+}
+
+#SecondSearch {
+	padding-top: 100%;
 }
 
 /*-- ================== 1.1 BODY FONT-SIZE ACCORDING TO DEVICE WIDTH ====================== --*/
