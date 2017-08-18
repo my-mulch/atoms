@@ -66,6 +66,10 @@ li:hover {
 	text-underline: none;
 }
 /* END SUGGESTIONS DROPDOWN */
+#force {
+	height: 25em;
+	overflow: scroll;
+}
 
 /*-- ================== 1.1 BODY FONT-SIZE ACCORDING TO DEVICE WIDTH ====================== --*/
 
