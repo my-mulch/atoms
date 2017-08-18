@@ -27,7 +27,7 @@ function links(keyword) {
 
             const name = text
             // let children = Array.from(first_p_links($, HTML).concat(all_links($, HTML)).slice(0, 8));
-            let children = all_links($, HTML).slice(0, 8);
+            let children = all_links($, HTML).filter(link => link.name !== name).slice(0, 8);
 
             let res = {
                 name: name,
@@ -36,10 +36,8 @@ function links(keyword) {
 
             if (res.children.length < 8) res = {
                 name: name,
-                children: disambiguate($, HTML).slice(0, 8)
+                children: disambiguate($, HTML).filter(link => link.name !== name).slice(0, 8)
             };
-
-            console.log(res)
 
             return res;
         })
