@@ -10,7 +10,7 @@ export function populate(graph) {
     graph.forEach((concept, group) => {
         const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
         nodes.push(center)
-        
+
         concept.children.forEach(relation => {
             const relationNormalized = relation.name.toLowerCase()
             links.push({ target: center.id, source: relationNormalized, strength: 0.1 })
@@ -63,7 +63,7 @@ export function update(view) {
     let [linkEntry, linkElements] = domify(
         view.linkGroup,
         view.links,
-        { 'stroke-width': 1, 'stroke': 'rgba(50, 50, 50, 0.1)' },
+        { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
         'line',
         link => link.target.id + link.source.id
     )
@@ -71,17 +71,18 @@ export function update(view) {
     let [nodeEntry, nodeElements] = domify(
         view.nodeGroup,
         view.nodes,
-        { 'r': 10, 'fill': node => node.level === 1 ? '#FF4500' : '#D3D3D3' },
+        { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
         'circle',
         node => node.id
     )
 
     nodeEntry.call(view.dragDrop)
+    nodeEntry.on('click', node => view.search(node.label))
 
     let [textEntry, textElements] = domify(
         view.textGroup,
         view.nodes,
-        { 'font-size': 13, 'dx': 5, 'dy': -7 },
+        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
     )
@@ -113,12 +114,12 @@ export function init(d3) {
         .forceLink()
         .id(function (link) { return link.id })
         .strength(function (link) { return link.strength })
-        .distance(100)
+        .distance(175)
 
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-125).distanceMax(375))
+        .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     const dragDrop = d3.drag().on('start', function (node) {
