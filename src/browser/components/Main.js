@@ -5,8 +5,8 @@ import { getSuggestions } from '../redux/suggestions'
 import Force from './Force'
 
 
-const Main = ({ search, getSuggestions, suggestions }) => (
-    <div className="wrapper" id="wrapper-large">
+const Main = ({ search, getSuggestions, suggestions }) => {
+    return (<div className="wrapper" id="wrapper-large">
         <div className="container-fluid">
             <h1 className="wow flipInY" data-wow-delay="1.5s">Atomizer</h1>
 
@@ -26,8 +26,8 @@ const Main = ({ search, getSuggestions, suggestions }) => (
             })}
             <Force />
         </div>
-    </div>
-)
+    </div>)
+}
 
 
 const mapState = ({ suggestions_reducer }) => ({ suggestions: suggestions_reducer })

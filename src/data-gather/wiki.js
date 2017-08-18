@@ -5,7 +5,7 @@ function sanitizeQuery(query) {
     return axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
         .then(wbpage => wbpage.data)
         .then(data => {
-            console.log(data.query.search[0].title);
+            // console.log(data.query.search[0].title);
             return data.query.search[0].title
         })
 }
@@ -39,7 +39,7 @@ function links(keyword) {
                 children: disambiguate($, HTML).slice(0, 8)
             };
 
-            console.log(res)
+            // console.log(res)
 
             return res;
         })
