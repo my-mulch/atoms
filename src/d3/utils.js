@@ -30,13 +30,20 @@ function domify(group, items, attributes, selection, tagFn) {
 
 export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links) {
 
+    const width = window.innerWidth
+    const height = window.innerHeight
+
     simulation.nodes(nodes).on('tick', () => {
         nodeElements
-            .attr('cx', node => node.x)
-            .attr('cy', node => node.y)
+            // .attr('cx', node => node.x)
+            // .attr('cy', node => node.y)
+            .attr('cx', function (node) { return node.x = Math.max(20, Math.min(width - 20, node.x)); })
+            .attr('cy', function (node) { return node.y = Math.max(20, Math.min(height - 20, node.y)); })
         textElements
-            .attr('x', node => node.x)
-            .attr('y', node => node.y)
+            // .attr('x', node => node.x)
+            // .attr('y', node => node.y)
+            .attr('x', function (node) { return node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))) })
+            .attr('y', function (node) { return node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))) })
         linkElements
             .attr('x1', link => link.source.x)
             .attr('y1', link => link.source.y)
@@ -53,7 +60,7 @@ export function update(view) {
     let [linkEntry, linkElements] = domify(
         view.linkGroup,
         view.links,
-        { 'stroke-width': 1, 'stroke': 'rgba(50, 50, 50, 0.2)' },
+        { 'stroke-width': 1, 'stroke': 'rgba(50, 50, 50, 0.1)' },
         'line',
         link => link.target.id + link.source.id
     )
@@ -61,7 +68,7 @@ export function update(view) {
     let [nodeEntry, nodeElements] = domify(
         view.nodeGroup,
         view.nodes,
-        { 'r': 10, 'fill': node => node.level === 1 ? 'red' : 'gray' },
+        { 'r': 10, 'fill': node => node.level === 1 ? '#FF4500' : '#D3D3D3' },
         'circle',
         node => node.id
     )
@@ -71,7 +78,7 @@ export function update(view) {
     let [textEntry, textElements] = domify(
         view.textGroup,
         view.nodes,
-        { 'font-size': 15, 'dx': 15, 'dy': 4 },
+        { 'font-size': 15, 'font-weight': 'bold', 'dx': 5, 'dy': -7 },
         'text',
         node => node.id)
 
@@ -102,11 +109,12 @@ export function init(d3) {
         .forceLink()
         .id(function (link) { return link.id })
         .strength(function (link) { return link.strength })
+        .distance(80)
 
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-50))
+        .force('charge', d3.forceManyBody().strength(-50).distanceMax(250))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     const dragDrop = d3.drag().on('start', function (node) {
