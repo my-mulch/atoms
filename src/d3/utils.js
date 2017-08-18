@@ -3,13 +3,23 @@ import $ from 'jquery'
 export function populate(graph) {
     const nodes = []
     const links = []
+    const dups = new Set()
+
+    graph.forEach(concept => dups.add(concept.name.toLowerCase()))
+
     graph.forEach((concept, group) => {
         const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
-        concept.children.forEach(relation => {
-            links.push({ target: center.id, source: relation.name.toLowerCase(), strength: 0.1 })
-            nodes.push({ id: relation.name.toLowerCase(), group: 0, label: relation.name, level: 2 })
-        })
         nodes.push(center)
+        
+        concept.children.forEach(relation => {
+            const relationNormalized = relation.name.toLowerCase()
+            links.push({ target: center.id, source: relationNormalized, strength: 0.1 })
+
+            if (dups.has(relationNormalized)) return
+            else dups.add(relationNormalized)
+            nodes.push({ id: relationNormalized, group, label: relation.name, level: 2 })
+        })
+
     })
 
     return [nodes, links]
@@ -28,22 +38,15 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links) {
-
-    const width = window.innerWidth
-    const height = window.innerHeight
+export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links, width, height) {
 
     simulation.nodes(nodes).on('tick', () => {
         nodeElements
-            // .attr('cx', node => node.x)
-            // .attr('cy', node => node.y)
-            .attr('cx', function (node) { return node.x = Math.max(20, Math.min(width - 20, node.x)); })
-            .attr('cy', function (node) { return node.y = Math.max(20, Math.min(height - 20, node.y)); })
+            .attr('cx', node => node.x = Math.max(20, Math.min(width - 20, node.x)))
+            .attr('cy', node => node.y = Math.max(20, Math.min(height - 20, node.y)))
         textElements
-            // .attr('x', node => node.x)
-            // .attr('y', node => node.y)
-            .attr('x', function (node) { return node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))) })
-            .attr('y', function (node) { return node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))) })
+            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))))
+            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))))
         linkElements
             .attr('x1', link => link.source.x)
             .attr('y1', link => link.source.y)
@@ -78,9 +81,10 @@ export function update(view) {
     let [textEntry, textElements] = domify(
         view.textGroup,
         view.nodes,
-        { 'font-size': 15, 'font-weight': 'bold', 'dx': 5, 'dy': -7 },
+        { 'font-size': 13, 'dx': 5, 'dy': -7 },
         'text',
-        node => node.id)
+        node => node.id
+    )
 
     textEntry.text(node => node.label)
 
@@ -109,12 +113,12 @@ export function init(d3) {
         .forceLink()
         .id(function (link) { return link.id })
         .strength(function (link) { return link.strength })
-        .distance(80)
+        .distance(100)
 
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-50).distanceMax(250))
+        .force('charge', d3.forceManyBody().strength(-125).distanceMax(375))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     const dragDrop = d3.drag().on('start', function (node) {

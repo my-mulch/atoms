@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { search } from '../redux/concepts'
 import { populate, init, update, simulate } from '../../d3/utils'
 import * as d3 from 'd3'
+import $ from 'jquery'
 
 
 
@@ -18,8 +19,10 @@ const Force = ({ graph, search }) => {
         const [nodes, links] = populate(graph)
         const [linkElements, nodeElements, textElements] = update({ linkGroup, nodeGroup, textGroup, nodes, links, dragDrop })
 
-        simulate(forces, nodeElements, textElements, linkElements, nodes, links)
+        simulate(forces, nodeElements, textElements, linkElements, nodes, links, width, height)
 
+        
+        
     }
 
     return null
