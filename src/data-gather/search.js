@@ -16,7 +16,7 @@ const relate = (query) => (
         .then(article =>
             axios.get(`https://en.wikipedia.org/wiki/${article}`)
                 // cheerio provides node.js with jquery functionality
-                // we load html into a virtual DOM
+                // load html into virtual DOM => '$'
                 .then(res => {
                     const html = res.data
                     const $ = cheerio.load(html)

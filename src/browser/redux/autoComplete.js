@@ -1,21 +1,21 @@
 import axios from "axios"
 
 /* ------------------------- ACTIONS -------------------------- */
-const SUGGEST = 'SUGGEST_ARTICLES';
+const SUGGEST = 'AUTOCOMPLETE';
 
 /*---------------------- ACTION CREATORS -----------------------*/
-const suggest = suggestions => ({ type: SUGGEST, suggestions })
+const suggest = completions => ({ type: SUGGEST, completions })
 
 /* ------------------------- REDUCERS ------------------------- */
-const reducer = (suggestions = [], action) => {
-    return action.type === SUGGEST ? action.suggestions : suggestions
+const reducer = (completions = [], action) => {
+    return action.type === SUGGEST ? action.completions : completions
 }
 
 /* ------------------------- THUNKS ------------------------- */
-export const getSuggestions = key => dispatch => {
+export const suggest = key => dispatch => {
     axios.post('/suggest', { key: key })
-        .then(suggestions => {
-            dispatch(suggest(suggestions.data))
+        .then(completions => {
+            dispatch(suggest(completions.data))
         }).catch(console.error)
 }
 

@@ -11,6 +11,6 @@ function suggest(key) {
         })
 }
 
-module.exports = suggestions
+module.exports = suggest
 
 

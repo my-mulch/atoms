@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
 import graph from './concepts';
-import suggestions_reducer from './suggestions';
+import completions from './suggestions';
 
-export default combineReducers({ graph, suggestions_reducer });
+export default combineReducers({ graph, completions });
