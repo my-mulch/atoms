@@ -1,23 +1,57 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 
-// text indicating an ambiguous query. If our array is empty we are clear.
+// text indicating an ambiguous query. If our array is empty, we are clear.
 const AMBIGUOUS = 'in Wiktionary, the free dictionary'
-const isAmbiguous = $ => Array.from($(`#content:contains(${AMBIGUOUS})`)).length > 0
+const isAmbiguous = ($) => Array.from($(`#content:contains(${AMBIGUOUS})`)).length > 0
 
 const sanitize = (query) => (
     axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
         // API handles fuzzy search queries
         .then(page => page.data.query.search[0].title)
 )
+
+const relate = (query) => (
+    sanitize(query.replace(' ', '+'))
+        .then(article =>
+            axios.get(`https://en.wikipedia.org/wiki/${article}`)
+                // cheerio provides node.js with jquery functionality
+                // we load html into a virtual DOM
+                .then(res => {
+                    const html = res.data
+                    const $ = cheerio.load(html)
+                    return bundle(article,
+                        isAmbiguous($)
+                            // show possible links to user
+                            ? disambiguate($)
+                            // rank links by relevance
+                            : rank(html, relations($))
+                    )
+                })
+        )
+)
+
+// bundle format for D3 rendering
+const bundle = (article, relations) => ({ article, children: relations })
+
+// rank links by occurence count in surrounding html
+const rank = (html, relations, fn) => (
+    relations
+        .map(relation => ({ numOccur: occurrences(html, relation), relation }))
+        .sort((a, b) => b.numOccur - a.numOccur).slice(0, 8)
+)
+
+const relations = ($) => grabLinks($, 'p')
+const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 10)
+
 const grabLinks = ($, context) => {
     const links = new Set()
-    $(context).find('a').map((_, atag) =>
-        links.add(atag.attribs.title))
-    return links
+    $(context).find('a').map((_, atag) => {
+        if (atag.attribs.title)
+            links.add(atag.attribs.title)
+    })
+    return Array.from(links)
 }
-const relations = ($) => grabLinks($, 'p')
-const disambiguate = ($) => grabLinks($, '#content ul')
 
 const occurrences = (text, target) => {
     if (!(target && target.length)) return 0
@@ -33,33 +67,5 @@ const occurrences = (text, target) => {
     return n;
 }
 
-const bundle = (article, relations) => ({ article, children: relations })
-
-const rank = (html, relations) => (
-    Array.from(relations)
-        .map(relation => ({ numOccur: occurrences(html, relation), relation }))
-        .sort((a, b) => b.numOccur - a.numOccur).slice(0, 8)
-)
-
-const relate = (query) => (
-    sanitize(query.replace(' ', '+'))
-        .then(article =>
-            axios.get(`https://en.wikipedia.org/wiki/${article}`)
-                // cheerio provides node with jquery functionality
-                // we load the html into a virtual DOM
-                .then(res => {
-                    const html = res.data
-                    const $ = cheerio.load(html)
-                    return bundle(article,
-                        isAmbiguous($)
-                            // show possible links to user
-                            ? disambiguate($)
-                            // select only links to other wiki pages
-                            : rank(html, relations($))
-                    )
-                })
-        )
-)
-
-relate('tidal wave').then(console.log)
+relate('Apes and monkeys in space').then(console.log)
 module.exports = relate;
