@@ -11,27 +11,23 @@ const Force = ({ graph, search }) => {
 
     if (Object.keys(graph).length) {
 
-
         const [width, height, svg,
             linkGroup, nodeGroup, textGroup,
             linkForce, forces, dragDrop] = init(d3)
 
         const [nodes, links] = populate(graph)
-        
+
         const [linkElements, nodeElements, textElements] = update({
             linkGroup,
             nodeGroup,
             textGroup,
-            nodes, 
+            nodes,
             links,
-            dragDrop, 
+            dragDrop,
             search
         })
 
         simulate(forces, nodeElements, textElements, linkElements, nodes, links, width, height)
-
-
-
     }
 
     return null

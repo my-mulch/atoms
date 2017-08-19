@@ -1,7 +1,7 @@
 const axios = require("axios")
 
-function suggestions (key) {
-    // console.log("THIS IS THE KEY:", key)
+function suggest(key) {
+
     return axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${key}&format=json&_=1502826454683`)
         .then(wbpage => wbpage.data)
         .then(data => {

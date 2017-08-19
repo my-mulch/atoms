@@ -6,10 +6,12 @@ import Splash from './Splash'
 import SecondSearch from './SecondSearch'
 import Force from './Force'
 
-const Main = ({search, getSuggestions, suggestions}) => (
-        <Splash/>
+const Main = ({ search, getSuggestions, suggestions }) => (
+        
+        <Splash />
+        <Force />
 )
 
-const mapState = ( { suggestions_reducer } ) => ({ suggestions: suggestions_reducer })
+const mapState = ({ suggestions_reducer }) => ({ suggestions: suggestions_reducer })
 const mapDispatch = { search, getSuggestions }
 export default connect(mapState, mapDispatch)(Main);
