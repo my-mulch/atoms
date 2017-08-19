@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { search } from '../redux/concepts'
+import { search } from '../redux/graph'
 import { populate, init, update, simulate } from '../../d3/utils'
 import * as d3 from 'd3'
 import $ from 'jquery'

@@ -67,5 +67,4 @@ const occurrences = (text, target) => {
     return n;
 }
 
-relate('Apes and monkeys in space').then(console.log)
 module.exports = relate;
