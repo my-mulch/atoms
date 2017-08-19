@@ -30,6 +30,9 @@ class Splash extends Component {
                                     evt.preventDefault();
                                     // this.props.search(evt.target.query.value)
                                     console.log(this.state.selectedSuggestion)
+                                    evt.target.query.value = ''
+                                    this.setState({selectedSuggestion: null})
+                                    this.props.getSuggestions(evt.target.value ? evt.target.value : ' ')
                                     this.props.search(this.state.selectedSuggestion)
                                     $("html, body").animate({scrollTop: 9999}, 1000);
                                 }}
