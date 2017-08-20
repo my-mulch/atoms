@@ -1,6 +1,6 @@
 import $ from 'jquery'
 
-export function populate(graph) {
+export function skeleton(graph) {
     const nodes = []
     const links = []
     const dups = new Set()
@@ -22,7 +22,7 @@ export function populate(graph) {
 
     })
 
-    return [nodes, links]
+    return { nodes, links }
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -96,7 +96,7 @@ export function update(view) {
     return [linkElements, nodeElements, textElements]
 }
 
-export function init(d3) {
+export function diagram(d3) {
     const width = window.innerWidth
     const height = window.innerHeight
 
@@ -137,7 +137,7 @@ export function init(d3) {
         node.fy = null
     })
 
-    return [
+    return {
         width,
         height,
         svg,
@@ -147,5 +147,5 @@ export function init(d3) {
         linkForce,
         simulation,
         dragDrop
-    ]
+    }
 }

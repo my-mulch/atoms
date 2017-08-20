@@ -44,6 +44,7 @@ const rank = (relations, html) =>
 const relations = ($) => grabLinks($, 'p')
 const disambiguate = ($) => grabLinks($, '#content ul')
 
+// finds atags in a given context
 const grabLinks = ($, context) => {
     const links = new Set()
     $(context).find('a').map((_, atag) => {
