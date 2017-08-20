@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { search } from '../redux/graph'
-import { suggest } from '../redux/autoComplete'
+import { suggest, clear } from '../redux/autoComplete'
 import $ from 'jquery'
 
-const Splash = ({ search, suggest, completions }) => (
+const Splash = ({ search, suggest, completions, clear }) => (
     <div id="splash">
         <h1>atomizer</h1>
         <form autoComplete="off" className="form-inline search-form"
             onSubmit={(event) => handleSubmit(event, search)}
-            onChange={(event) => handleChange(event, suggest)}>
+            onChange={(event) => handleChange(event, suggest, clear)}>
             <div className="input-group">
                 <span className="input-group-btn">
                     <input name="query" className="form-control" placeholder="Search"></input>
@@ -30,13 +30,16 @@ const handleSubmit = (event, search) => {
     $("html, body").animate({ scrollTop: 10000000 }, 1000);
 }
 
-const handleChange = (event, suggest) => {
+const handleChange = (event, suggest, clear) => {
     event.preventDefault();
-    suggest(event.target.value)
+
+    event.target.value
+        ? suggest(event.target.value)
+        : clear()
 }
 
 const mapState = ({ completions }) => ({ completions })
-const mapDispatch = { search, suggest }
+const mapDispatch = { search, suggest, clear }
 
 export default connect(mapState, mapDispatch)(Splash);
 

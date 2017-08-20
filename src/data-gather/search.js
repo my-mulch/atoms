@@ -32,12 +32,12 @@ const relate = (query) => (
 )
 
 // bundle format for D3 rendering
-const bundle = (article, relations) => ({ article, children: relations })
+const bundle = (article, relations) => ({ name: article, children: relations })
 
 // rank links by occurence count in surrounding html
 const rank = (html, relations, fn) => (
     relations
-        .map(relation => ({ numOccur: occurrences(html, relation), relation }))
+        .map(relation => ({ numOccur: occurrences(html, relation), name: relation }))
         .sort((a, b) => b.numOccur - a.numOccur).slice(0, 8)
 )
 
