@@ -1,9 +1,8 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
 
-// text indicating an ambiguous query. If our array is empty, we are clear.
-const AMBIGUOUS = 'in Wiktionary, the free dictionary'
-const isAmbiguous = ($) => Array.from($(`#content:contains(${AMBIGUOUS})`)).length > 0
+// div indicating ambiguous query. If array is empty, query was non-ambigous
+const isAmbiguous = ($) => Array.from($('#disambigbox')).length > 0
 
 const sanitize = (query) => (
     axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
@@ -15,34 +14,35 @@ const relate = (query) => (
     sanitize(query.replace(' ', '+'))
         .then(article =>
             axios.get(`https://en.wikipedia.org/wiki/${article}`)
-                // cheerio provides node.js with jquery functionality
-                // load html into virtual DOM => '$'
+                // cheerio provides jquery functionality
+                // loads html into virtual DOM => '$'
                 .then(res => {
                     const html = res.data
                     const $ = cheerio.load(html)
+                    // bundle related links for front-end
                     return bundle(article,
                         isAmbiguous($)
-                            // show possible links to user
+                            // if article is ambigous return possibilites
                             ? disambiguate($)
-                            // rank links by relevance
-                            : rank(html, relations($))
-                    )
+                            // otherwise return related articles
+                            : rank(relations($), html))
                 })
         )
 )
 
 // bundle format for D3 rendering
-const bundle = (article, relations) => ({ name: article, children: relations })
+const bundle = (article, relations) => ({
+    title: article,
+    relations: relations.map(relation => ({ title: relation }))
+})
 
-// rank links by occurence count in surrounding html
-const rank = (html, relations, fn) => (
-    relations
-        .map(relation => ({ numOccur: occurrences(html, relation), name: relation }))
-        .sort((a, b) => b.numOccur - a.numOccur).slice(0, 8)
-)
+// rank by occurence count in surrounding html
+const rank = (relations, html) =>
+    relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
+        .slice(0, 8)
 
 const relations = ($) => grabLinks($, 'p')
-const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 10)
+const disambiguate = ($) => grabLinks($, '#content ul')
 
 const grabLinks = ($, context) => {
     const links = new Set()

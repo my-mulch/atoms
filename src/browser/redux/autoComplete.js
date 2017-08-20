@@ -18,7 +18,7 @@ export const suggest = query => dispatch =>
         .then(res => dispatch(autoComplete(res.data)))
         .catch(console.error)
 
-export const clear = _ => dispatch => dispatch(clearCompletions())
+export const clearSuggestions = _ => dispatch => dispatch(clearCompletions())
 
 
 export default reducer

@@ -5,19 +5,19 @@ export function populate(graph) {
     const links = []
     const dups = new Set()
 
-    graph.forEach(concept => dups.add(concept.name.toLowerCase()))
+    graph.forEach(concept => dups.add(concept.title.toLowerCase()))
 
     graph.forEach((concept, group) => {
-        const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
+        const center = { id: concept.title.toLowerCase(), group, label: concept.title.toUpperCase(), level: 1 }
         nodes.push(center)
 
-        concept.children.forEach(relation => {
-            const relationNormalized = relation.name.toLowerCase()
+        concept.relations.forEach(relation => {
+            const relationNormalized = relation.title.toLowerCase()
             links.push({ target: center.id, source: relationNormalized, strength: 0.1 })
 
             if (dups.has(relationNormalized)) return
             else dups.add(relationNormalized)
-            nodes.push({ id: relationNormalized, group, label: relation.name, level: 2 })
+            nodes.push({ id: relationNormalized, group, label: relation.title, level: 2 })
         })
 
     })

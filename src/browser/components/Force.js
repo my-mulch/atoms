@@ -5,8 +5,6 @@ import { populate, init, update, simulate } from '../../d3/utils'
 import * as d3 from 'd3'
 import $ from 'jquery'
 
-
-
 const Force = ({ graph, search }) => {
 
     if (Object.keys(graph).length) {
