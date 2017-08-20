@@ -4,8 +4,8 @@ const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
 
 const update = concept => ({ type: UPDATE, concept })
 
-const reducer = (knowledge = [], action) => {
-    return action.type === UPDATE ? [...knowledge, action.concept] : knowledge
+const reducer = (graph = [], action) => {
+    return action.type === UPDATE ? [...graph, action.concept] : graph
 }
 
 export const search = query => dispatch => {

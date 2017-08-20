@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import { search } from '../redux/graph'
-import { suggest, clearSuggestions } from '../redux/autoComplete'
+import { suggest, clearCompletions } from '../redux/completions'
 import $ from 'jquery'
 
-const Query = ({ search, suggest, completions, clearSuggestions }) => (
+const Query = ({ search, suggest, completions, clearCompletions }) => (
     <div id="query">
         <form autoComplete="off" className="form-inline search-form"
-            onSubmit={(event) => handleSubmit(event, search, clearSuggestions)}
-            onChange={(event) => handleChange(event, suggest, clearSuggestions)}>
+            onSubmit={(event) => handleSubmit(event, search, clearCompletions)}>
             <div className="input-group">
                 <span className="input-group-btn">
                     <input name="query" className="form-control" placeholder="Search"></input>
@@ -24,23 +23,23 @@ const Query = ({ search, suggest, completions, clearSuggestions }) => (
     </div>
 )
 
-const handleSubmit = (event, search, clearSuggestions) => {
+const handleSubmit = (event, search, clearCompletions) => {
     event.preventDefault();
     search(event.target.query.value)
-    clearSuggestions()
+    clearCompletions()
     event.target.query.value = ''
 }
 
-const handleChange = (event, suggest, clearSuggestions) => {
+const handleChange = (event, suggest, clearCompletions) => {
     event.preventDefault();
 
     event.target.value
         ? suggest(event.target.value)
-        : clearSuggestions()
+        : clearCompletions()
 }
 
 const mapState = ({ completions }) => ({ completions })
-const mapDispatch = { search, suggest, clearSuggestions }
+const mapDispatch = { search, suggest, clearCompletions }
 
 export default connect(mapState, mapDispatch)(Query);
 

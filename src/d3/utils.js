@@ -38,7 +38,7 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links, width, height) {
+export function simulate({ simulation, nodeElements, textElements, linkElements, nodes, links, width, height }) {
 
     simulation.nodes(nodes).on('tick', () => {
         nodeElements
@@ -58,30 +58,29 @@ export function simulate(simulation, nodeElements, textElements, linkElements, n
     simulation.alphaTarget(0.7).restart()
 }
 
-export function update(view) {
-
+export function rendering(diagram) {
     let [linkEntry, linkElements] = domify(
-        view.linkGroup,
-        view.links,
+        diagram.linkGroup,
+        diagram.links,
         { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
         'line',
         link => link.target.id + link.source.id
     )
 
     let [nodeEntry, nodeElements] = domify(
-        view.nodeGroup,
-        view.nodes,
+        diagram.nodeGroup,
+        diagram.nodes,
         { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
         'circle',
         node => node.id
     )
 
-    nodeEntry.call(view.dragDrop)
-    nodeEntry.on('click', node => view.search(node.label))
+    nodeEntry.call(diagram.dragDrop)
+    nodeEntry.on('click', node => diagram.search(node.label))
 
     let [textEntry, textElements] = domify(
-        view.textGroup,
-        view.nodes,
+        diagram.textGroup,
+        diagram.nodes,
         { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
@@ -93,7 +92,7 @@ export function update(view) {
     nodeElements = nodeEntry.merge(nodeElements)
     textElements = textEntry.merge(textElements)
 
-    return [linkElements, nodeElements, textElements]
+    return { linkElements, nodeElements, textElements }
 }
 
 export function diagram(d3) {

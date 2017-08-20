@@ -3,8 +3,8 @@ import axios from "axios"
 const SUGGEST = 'AUTO_COMPLETE'
 const CLEAR = 'CLEAR_COMPLETIONS'
 
-const autoComplete = completions => ({ type: SUGGEST, completions })
-const clearCompletions = _ => ({ type: CLEAR })
+const complete = completions => ({ type: SUGGEST, completions })
+const clear = _ => ({ type: CLEAR })
 
 const reducer = (completions = [], action) => {
     if (action.type === SUGGEST) return action.completions
@@ -15,10 +15,10 @@ const reducer = (completions = [], action) => {
 
 export const suggest = query => dispatch =>
     axios.get(`/suggest?input=${query}`)
-        .then(res => dispatch(autoComplete(res.data)))
+        .then(res => dispatch(complete(res.data)))
         .catch(console.error)
 
-export const clearSuggestions = _ => dispatch => dispatch(clearCompletions())
+export const clearCompletions = _ => dispatch => dispatch(clear())
 
 
 export default reducer
