@@ -1,15 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { search } from '../redux/concepts'
-import { getSuggestions } from '../redux/suggestions'
 import Splash from './Splash'
-import SecondSearch from './SecondSearch'
 import Force from './Force'
+import Query from './Query'
 
-const Main = ({search, getSuggestions, suggestions}) => (
-        <Splash/>
+export default () => (
+    <div className="wrapper" id="wrapper-large">
+        <div className="container-fluid">
+            <Splash />
+            <Force />
+            <Query />
+        </div>
+    </div>
 )
-
-const mapState = ( { suggestions_reducer } ) => ({ suggestions: suggestions_reducer })
-const mapDispatch = { search, getSuggestions }
-export default connect(mapState, mapDispatch)(Main);
