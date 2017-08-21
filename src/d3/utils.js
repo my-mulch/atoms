@@ -3,23 +3,26 @@ import $ from 'jquery'
 export function skeleton(graph) {
     const nodes = []
     const links = []
-    const dups = new Set()
 
-    graph.forEach(concept => dups.add(concept.title.toLowerCase()))
-
-    graph.forEach((concept, group) => {
-        const center = { id: concept.title.toLowerCase(), group, label: concept.title.toUpperCase(), level: 1 }
-        nodes.push(center)
-
-        concept.relations.forEach(relation => {
-            const relationNormalized = relation.title.toLowerCase()
-            links.push({ target: center.id, source: relationNormalized, strength: 0.1 })
-
-            if (dups.has(relationNormalized)) return
-            else dups.add(relationNormalized)
-            nodes.push({ id: relationNormalized, group, label: relation.title, level: 2 })
+    Object.values(graph).forEach(node => {
+        const isParent = node.adj.length
+        if (isParent)
+            // if node has a non-empty adjacency list
+            // we capture links 
+            links.push(...node.adj.map(
+                // links for d3 require a special object
+                relatedNode => ({
+                    target: node.id,
+                    source: relatedNode.id,
+                    strength: 0.1
+                })
+            ))
+        // similiar story for nodes
+        nodes.push({
+            id: node.id, // will hash in future
+            label: node.id,
+            level: isParent ? 1 : 2
         })
-
     })
 
     return { nodes, links }
@@ -36,26 +39,6 @@ function domify(group, items, attributes, selection, tagFn) {
     })
 
     return [entryPoint, elements]
-}
-
-export function simulate({ simulation, nodeElements, textElements, linkElements, nodes, links, width, height }) {
-
-    simulation.nodes(nodes).on('tick', () => {
-        nodeElements
-            .attr('cx', node => node.x = Math.max(20, Math.min(width - 20, node.x)))
-            .attr('cy', node => node.y = Math.max(20, Math.min(height - 20, node.y)))
-        textElements
-            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))))
-            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))))
-        linkElements
-            .attr('x1', link => link.source.x)
-            .attr('y1', link => link.source.y)
-            .attr('x2', link => link.target.x)
-            .attr('y2', link => link.target.y)
-    })
-
-    simulation.force('link').links(links)
-    simulation.alphaTarget(0.7).restart()
 }
 
 export function rendering(diagram) {
@@ -93,6 +76,27 @@ export function rendering(diagram) {
     textElements = textEntry.merge(textElements)
 
     return { linkElements, nodeElements, textElements }
+}
+
+
+export function simulate({ simulation, nodeElements, textElements, linkElements, nodes, links, width, height }) {
+
+    simulation.nodes(nodes).on('tick', () => {
+        nodeElements
+            .attr('cx', node => node.x = Math.max(20, Math.min(width - 20, node.x)))
+            .attr('cy', node => node.y = Math.max(20, Math.min(height - 20, node.y)))
+        textElements
+            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))))
+            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))))
+        linkElements
+            .attr('x1', link => link.source.x)
+            .attr('y1', link => link.source.y)
+            .attr('x2', link => link.target.x)
+            .attr('y2', link => link.target.y)
+    })
+
+    simulation.force('link').links(links)
+    simulation.alphaTarget(0.7).restart()
 }
 
 export function diagram(d3) {
