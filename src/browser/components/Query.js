@@ -6,12 +6,10 @@ import $ from 'jquery'
 
 const Query = ({ search, suggest, completions, clearCompletions }) => (
     <div id="query">
-        <form autoComplete="off" className="form-inline search-form"
+        <form autoComplete="off" className="search-form"
             onSubmit={(event) => handleSubmit(event, search, clearCompletions)}>
             <div className="input-group">
-                <span className="input-group-btn">
-                    <input name="query" className="form-control" placeholder="Search"></input>
-                </span>
+                <input name="query" className="form-control"></input>
             </div>
             <ul className="dropdown">{
                 completions &&
