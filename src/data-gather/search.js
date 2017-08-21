@@ -33,7 +33,7 @@ const relate = (query) => (
 // bundle format for D3 rendering
 const bundle = (article, relations) => ({
     title: article,
-    relations: relations.map(relation => ({ title: relation }))
+    relations: relations
 })
 
 // rank by occurence count in surrounding html

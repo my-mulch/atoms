@@ -8,8 +8,8 @@ import { simulate } from '../../d3/utils'
 
 
 class Force extends React.Component {
-    componentDidMount() { createDiagram(this.props) }
-    componentDidUpdate() { updateDiagram(this.props) }
+    // componentDidMount() { createDiagram(this.props) }
+    // componentDidUpdate() { updateDiagram(this.props) }
     render() { return null }
 }
 
