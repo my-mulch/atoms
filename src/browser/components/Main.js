@@ -8,6 +8,8 @@ export default () => (
         <div className="container-fluid">
             <Splash />
             <Force />
+        </div>
+        <div className="container-fluid">
             <Query />
         </div>
     </div>
