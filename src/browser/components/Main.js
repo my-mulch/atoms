@@ -9,8 +9,9 @@ export default () => (
             <Splash />
             <Force />
         </div>
-        <div className="container-fluid">
-            <Query />
-        </div>
     </div>
 )
+
+    // <div className="container-fluid">
+    //     <Query />
+    // </div>
