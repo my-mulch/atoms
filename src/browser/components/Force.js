@@ -8,16 +8,16 @@ import { simulate } from '../../d3/utils'
 
 
 class Force extends React.Component {
-    componentDidMount() { this.props.initialize(d3) }
-    render() { return forceDiagram(this.props) }
+    componentDidMount() { createDiagram(this.props) }
+    componentDidUpdate() { updateDiagram(this.props) }
+    render() { return null }
 }
 
-const forceDiagram = ({ populate, draw, graph, diagram }) => {
-    if (Object.keys(graph).length) {
-        populate(graph)
-        draw(diagram)
-        simulate(diagram)
-    }
+const createDiagram = ({ initialize }) => initialize(d3)
+const updateDiagram = ({ populate, draw, graph, diagram }) => {
+    populate(graph)
+    draw(diagram)
+    simulate(diagram)
     return null
 }
 
