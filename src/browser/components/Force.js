@@ -3,49 +3,37 @@ import React from 'react'
 
 import { connect } from 'react-redux'
 import { search } from '../redux/graph'
-import { initialize, populate, draw } from '../redux/diagram'
 import { simulate, feature, creator } from '../../d3/utils'
 
 
 
 class Force extends React.Component {
-    // componentDidMount() { createDiagram(this.props) }
-    componentDidUpdate() { }
 
-    constructor() {
-        super()
-        this.state = {
-            nodes: [],
-            links: [],
-            linkForce: null,
-            simulation: null,
-            dragDrop: null
-        }
-
+    componentDidUpdate() { 
+        Object.values(this.props.graph)
     }
 
     render() {
         return (
             <svg ref={(svg) => {
-                const width = window.innerWidth
-                const height = window.innerHeight
+                this.width = window.innerWidth
+                this.height = window.innerHeight
 
-                const d3svg = d3.select(svg)
-                d3svg.attr('width', width).attr('height', height)
+                this.svg = d3.select(svg)
+                this.svg.attr('width', this.width).attr('height', this.height)
 
-                // we use d3svg groups to logically group the elements together
-                const linkGroup = d3svg.append('g').attr('class', 'links')
-                const nodeGroup = d3svg.append('g').attr('class', 'nodes')
-                const textGroup = d3svg.append('g').attr('class', 'texts')
+                const init = creator.bind(this)
 
                 // simulation setup with all forces
-                const initted = { width, height }
-                const init = creator.bind(initted)
+                this.linkForce = init(feature.LINK_FORCE)
+                this.simulation = init(feature.SIMULATION)
+                this.dragDrop = init(feature.DRAG_DROP)
 
-                initted.linkForce = init(feature.LINK_FORCE)
-                initted.simulation = init(feature.SIMULATION)
-                initted.dragDrop = init(feature.DRAG_DROP)
-                this.setState(initted)
+                // we use this.svg groups to logically group the elements together
+                this.linkGroup = this.svg.append('g').attr('class', 'links')
+                this.nodeGroup = this.svg.append('g').attr('class', 'nodes')
+                this.textGroup = this.svg.append('g').attr('class', 'texts')
+
             }} />
         )
     }
@@ -59,6 +47,6 @@ const updateDiagram = ({ populate, draw, graph, diagram }) => {
     return null
 }
 
-const mapProps = ({ graph, diagram }) => ({ graph, diagram })
-const mapDispatch = { search, initialize, populate, draw }
+const mapProps = ({ graph }) => ({ graph })
+const mapDispatch = { search }
 export default connect(mapProps, mapDispatch)(Force)
