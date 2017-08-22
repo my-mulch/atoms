@@ -6,13 +6,14 @@ import { search } from '../redux/graph'
 import { initialize, populate, draw } from '../redux/diagram'
 import { simulate } from '../../d3/utils'
 
+import Modal from './Modal'
 
 class Force extends React.Component {
     componentDidMount() { createDiagram(this.props) }
     componentDidUpdate() { updateDiagram(this.props) }
     render() {
         return (
-            <div id="svg-container"></div>
+              <div></div>
         )
     }
 }

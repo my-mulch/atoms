@@ -33,18 +33,6 @@ ul {
 	border-bottom-right-radius: 1em;
 }
 
-ul:active {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	background: rgba(0, 0, 0, .5);
-	border: medium;
-	text-align: left;
-	width: 55.09%;
-	padding-left: 0;
-	padding-bottom: 100%;
-}
 
 li {
 	font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
