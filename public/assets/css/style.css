@@ -152,6 +152,10 @@ h2 {
 	background-color: black;
 }
 
+.input-group {
+	margin-bottom: 35em;
+}
+
 @media all and (max-width:767px) {
 	body {
 		font-size: 97% !important;
