@@ -30,10 +30,10 @@ class Query extends Component {
                             value={this.state.value}
                             onChange={(event) => this.handleChange(event, suggest, clearCompletions)}
                         />
-                        <ul display={this.state.value !== '' ? "inline-block" : "none"}>{
+                        <ul>{
                             completions &&
                             completions.map((suggestion, index) => (
-                                <li key={index} onClick={(event) => this.handleClick(suggestion, search, clearCompletions)}>{suggestion}</li>
+                                <li key={index} onClick={(event) => this.handleClick(suggestion, clearCompletions)}>{suggestion}</li>
                             ))}
                         </ul>
                     </div>
@@ -51,15 +51,15 @@ class Query extends Component {
     }
 
     handleChange(event, suggest, clearCompletions) {
+        event.preventDefault()
         this.setState({ value: event.target.value })
         this.state.value
             ? suggest(this.state.value)
             : clearCompletions()
     }
 
-    handleClick(suggestion, search, clearCompletions) {
-        search(suggestion)
-        this.setState({ value: '' })
+    handleClick(value, clearCompletions) {
+        this.setState({ value: value })
         clearCompletions()
     }
 }

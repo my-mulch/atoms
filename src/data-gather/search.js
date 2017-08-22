@@ -36,13 +36,13 @@ const bundle = (article, relations) => ({
     relations: relations
 })
 
-// rank by occurence count in surrounding html
+// rank by occurrence count in surrounding html
 const rank = (relations, html) =>
     relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
         .slice(0, 8)
 
 const relations = ($) => grabLinks($, 'p')
-const disambiguate = ($) => grabLinks($, '#content ul')
+const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 8)
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
