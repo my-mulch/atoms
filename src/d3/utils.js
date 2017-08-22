@@ -1,4 +1,5 @@
-import $ from 'jquery'
+import * as d3 from 'd3'
+
 
 export function skeleton(graph) {
     const nodes = []
@@ -113,33 +114,7 @@ export function diagram(d3) {
     const textGroup = svg.append('g').attr('class', 'texts')
 
     // simulation setup with all forces
-    const linkForce = d3
-        .forceLink()
-        .id(link => link.id)
-        .strength(link => link.strength)
-        .distance(175)
 
-    const simulation = d3
-        .forceSimulation()
-        .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
-        .force('center', d3.forceCenter(width / 2, height / 2))
-
-    const dragDrop = d3.drag()
-        .on('start', node => {
-            node.fx = node.x
-            node.fy = node.y
-        }).on('drag', node => {
-            simulation.alphaTarget(0.7).restart()
-            node.fx = d3.event.x
-            node.fy = d3.event.y
-        }).on('end', node => {
-            if (!d3.event.active) {
-                simulation.alphaTarget(0)
-            }
-            node.fx = null
-            node.fy = null
-        })
 
     return {
         width,
@@ -151,5 +126,51 @@ export function diagram(d3) {
         linkForce,
         simulation,
         dragDrop
+    }
+}
+
+const LINK_FORCE = 'LINK_FORCE'
+const SIMULATION = 'SIMULATION'
+const DRAG_DROP = 'DRAG_DROP'
+
+export const feature = {
+    LINK_FORCE,
+    SIMULATION,
+    DRAG_DROP
+}
+
+
+export const init = (feature) => {
+    switch (feature) {
+        case LINK_FORCE:
+            return d3.forceLink()
+                .id(link => link.id)
+                .strength(link => link.strength)
+                .distance(175)
+
+        case SIMULATION:
+            return d3.forceSimulation()
+                .force('link', linkForce)
+                .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+        
+        case DRAG_DROP:
+            return d3.drag()
+                .on('start', node => {
+                    node.fx = node.x
+                    node.fy = node.y
+                }).on('drag', node => {
+                    simulation.alphaTarget(0.7).restart()
+                    node.fx = d3.event.x
+                    node.fy = d3.event.y
+                }).on('end', node => {
+                    if (!d3.event.active) {
+                        simulation.alphaTarget(0)
+                    }
+                    node.fx = null
+                    node.fy = null
+                })
+
+        default: throw new Error(`Cannot init ${feature}`)
     }
 }
