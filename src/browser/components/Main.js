@@ -8,7 +8,7 @@ export default () => (
         <div className="container-fluid">
             <Splash />
         </div>
-        <div id="svg" className="container-fluid">
+        <div className="forceArea">
             <Force />
         </div>
     </div>

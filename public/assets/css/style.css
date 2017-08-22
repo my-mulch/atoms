@@ -16,6 +16,7 @@ body {
 	background-size: cover;
 	background-position: center center;
 	overflow-x: hidden;
+	background-color: #010011;
 }
 
 /* START SUGGESTIONS DROPDOWN */
@@ -151,6 +152,10 @@ h2 {
 
 #svg-container {
 	background-color: black;
+}
+
+.input-group {
+	margin-bottom: 35em;
 }
 
 @media all and (max-width:767px) {

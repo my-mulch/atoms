@@ -8,7 +8,7 @@ export function skeleton(graph) {
         const isParent = node.adj.length
         if (isParent)
             // if node has a non-empty adjacency list
-            // we capture links 
+            // we capture links
             links.push(...node.adj.map(
                 // links for d3 require a special object
                 relatedNode => ({
@@ -122,7 +122,7 @@ export function diagram(d3) {
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
+        .force('charge', d3.forceManyBody().strength(-225).distanceMax(300))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     const dragDrop = d3.drag()
