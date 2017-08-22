@@ -17,11 +17,12 @@ const reducer = (graph = initialState, action) => {
         case UPDATE:
 
             // empties updated graph state
-            const newGraph = Object.assign({}, graph, {updated: {}}) 
+            const newGraph = Object.assign({}, graph, { updated: {} })
             // find or create with new graph as 'this' context
             const findOrCreate = foc.bind(newGraph)
             // find/create the root node
             const parent = findOrCreate(action.parentNode.title)
+            newGraph.updated[parent.title] = parent
             // add all relations to adjacency list
             parent.adj = action.parentNode.relations.map(findOrCreate)
             return newGraph

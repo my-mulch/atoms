@@ -1,16 +1,14 @@
 import * as d3 from 'd3'
 
 
-export function skeleton(graph) {
-    const nodes = []
-    const links = []
+export function populate(graph) {
 
-    Object.values(graph).forEach(node => {
+    Object.values(graph.updated).forEach(node => {
         const isParent = node.adj.length
         if (isParent)
             // if node has a non-empty adjacency list
             // we capture links 
-            links.push(...node.adj.map(
+            this.links.push(...node.adj.map(
                 // links for d3 require a special object
                 relatedNode => ({
                     target: node.id,
@@ -19,14 +17,12 @@ export function skeleton(graph) {
                 })
             ))
         // similiar story for nodes
-        nodes.push({
+        this.nodes.push({
             id: node.id, // will hash in future
             label: node.id,
             level: isParent ? 1 : 2
         })
     })
-
-    return { nodes, links }
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -42,29 +38,30 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function rendering(diagram) {
+export function draw() {
     let [linkEntry, linkElements] = domify(
-        diagram.linkGroup,
-        diagram.links,
+        this.linkGroup,
+        this.links,
         { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
         'line',
         link => link.target.id + link.source.id
     )
 
     let [nodeEntry, nodeElements] = domify(
-        diagram.nodeGroup,
-        diagram.nodes,
+        this.nodeGroup,
+        this.nodes,
         { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
         'circle',
         node => node.id
     )
 
-    nodeEntry.call(diagram.dragDrop)
-    nodeEntry.on('click', node => diagram.search(node.label))
+    nodeEntry.call(this.dragDrop)
+    nodeEntry.on('click', node => this.search(node.label))
+    nodeEntry.on('hover', console.log)
 
     let [textEntry, textElements] = domify(
-        diagram.textGroup,
-        diagram.nodes,
+        this.textGroup,
+        this.nodes,
         { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
@@ -72,62 +69,33 @@ export function rendering(diagram) {
 
     textEntry.text(node => node.label)
 
-    linkElements = linkEntry.merge(linkElements)
-    nodeElements = nodeEntry.merge(nodeElements)
-    textElements = textEntry.merge(textElements)
+    this.linkElements = linkEntry.merge(linkElements)
+    this.nodeElements = nodeEntry.merge(nodeElements)
+    this.textElements = textEntry.merge(textElements)
 
-    return { linkElements, nodeElements, textElements }
 }
 
 
-export function simulate({ simulation, nodeElements, textElements, linkElements, nodes, links, width, height }) {
+export function simulate() {
 
-    simulation.nodes(nodes).on('tick', () => {
-        nodeElements
-            .attr('cx', node => node.x = Math.max(20, Math.min(width - 20, node.x)))
-            .attr('cy', node => node.y = Math.max(20, Math.min(height - 20, node.y)))
-        textElements
-            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(width - node.x, node.x))))
-            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(height - node.y, node.y))))
-        linkElements
+    this.simulation.nodes(this.nodes).on('tick', () => {
+        this.nodeElements
+            .attr('cx', node => node.x = Math.max(20, Math.min(this.width - 20, node.x)))
+            .attr('cy', node => node.y = Math.max(20, Math.min(this.height - 20, node.y)))
+        this.textElements
+            .attr('x', node => node.x = Math.abs(Math.max(node.x, Math.min(this.width - node.x, node.x))))
+            .attr('y', node => node.y = Math.abs(Math.max(node.y, Math.min(this.height - node.y, node.y))))
+        this.linkElements
             .attr('x1', link => link.source.x)
             .attr('y1', link => link.source.y)
             .attr('x2', link => link.target.x)
             .attr('y2', link => link.target.y)
     })
 
-    simulation.force('link').links(links)
-    simulation.alphaTarget(0.7).restart()
+    this.simulation.force('link').links(this.links)
+    this.simulation.alphaTarget(0.7).restart()
 }
 
-export function diagram(d3) {
-    const width = window.innerWidth
-    const height = window.innerHeight
-
-    const svg = d3.select('svg')
-    svg.attr('width', width).attr('height', height)
-
-    $('g').length ? $('g').remove() : null
-    // we use svg groups to logically group the elements together
-    const linkGroup = svg.append('g').attr('class', 'links')
-    const nodeGroup = svg.append('g').attr('class', 'nodes')
-    const textGroup = svg.append('g').attr('class', 'texts')
-
-    // simulation setup with all forces
-
-
-    return {
-        width,
-        height,
-        svg,
-        linkGroup,
-        nodeGroup,
-        textGroup,
-        linkForce,
-        simulation,
-        dragDrop
-    }
-}
 
 const LINK_FORCE = 'LINK_FORCE'
 const SIMULATION = 'SIMULATION'
@@ -140,7 +108,7 @@ export const feature = {
 }
 
 
-export function creator (feature) {
+export function init (feature) {
     switch (feature) {
         case LINK_FORCE:
             return d3.forceLink()

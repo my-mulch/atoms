@@ -11,7 +11,3 @@ export default () => (
         </div>
     </div>
 )
-
-    // <div className="container-fluid">
-    //     <Query />
-    // </div>
