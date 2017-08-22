@@ -1,3 +1,7 @@
+html {
+	font-size: 90%;
+}
+
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -25,7 +29,6 @@ ul {
 	text-align: left;
 	width: 50%;
 	padding-left: 0;
-
 }
 
 li {
@@ -137,4 +140,98 @@ h1 {
 	text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
 }
 
+h2 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.2em;
+	color: #ffffff;
+	margin-top: 0;
+	margin-bottom: 0.6em;
+	font-weight: 700;
+}
 
+#svg-container {
+	background-color: black;
+}
+
+@media all and (max-width:767px) {
+	body {
+		font-size: 97% !important;
+	}
+}
+
+@media all and (max-width:1024px) and (min-width:768px) and (orientation: landscape) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1024px) and (min-width:768px) and (orientation: portrait) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1200px) and (min-width:1024px) {
+	body {
+		font-size: 85% !important;
+	}
+}
+
+@media all and (max-width:1366px) and (min-width:1200px) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1440px) and (min-width:1366px) {
+	body {
+		font-size: 105% !important;
+	}
+}
+
+@media all and (max-width:1680px) and (min-width:1440px) {
+	body {
+		font-size: 115% !important;
+	}
+}
+
+@media all and (max-width:1920px) and (min-width:1680px) {
+	body {
+		font-size: 140% !important;
+	}
+}
+
+@media all and (max-width:2048px) and (min-width:1920px) {
+	body {
+		font-size: 145% !important;
+	}
+}
+
+@media all and (max-width:2560px) and (min-width:2048px) {
+	body {
+		font-size: 155% !important;
+	}
+}
+
+@media all and (max-width:2880px) and (min-width:2560px) {
+	body {
+		font-size: 165% !important;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	html {
+		height: 100%;
+	}
+	h1 {
+		margin-top: 0.3em;
+		font-size: 13em;
+	}
+	h2 {
+		font-size: 2em;
+		margin-bottom: 1.2em;
+	}
+	.form-inline.search-form .input-group {
+		width: 100%;
+	}
+}
