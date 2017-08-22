@@ -11,14 +11,12 @@ const Query = ({ search, suggest, completions, clearCompletions }) => (
             onChange={(event) => handleChange(event, suggest, clearCompletions)}>
             <div className="input-group">
                 <input name="query" className="form-control"></input>
-
                 <ul>{
                     completions &&
                     completions.map((suggestion, index) => (
                         <li key={index}>{suggestion}</li>
                     ))
                 }</ul>
-
             </div>
 
         </form>
