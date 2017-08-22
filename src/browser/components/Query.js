@@ -24,12 +24,14 @@ class Query extends Component {
                 <form autoComplete="off" className="search-form"
                     onSubmit={(event) => this.handleSubmit(event, search, clearCompletions)}>
                     <div className="input-group">
-                        <input
-                            name="query"
-                            className="form-control"
-                            value={this.state.value}
-                            onChange={(event) => this.handleChange(event, suggest, clearCompletions)}
-                        />
+                        <div>
+                            <input
+                                name="query"
+                                className="form-control"
+                                value={this.state.value}
+                                onChange={(event) => this.handleChange(event, suggest, clearCompletions)}
+                            />
+                        </div>
                         <ul>{
                             completions &&
                             completions.map((suggestion, index) => (
@@ -46,13 +48,14 @@ class Query extends Component {
         event.preventDefault()
         search(this.state.value)
         clearCompletions()
-        this.setState({ value: null })
+        this.setState({ value: '' })
         $("html, body").animate({ scrollTop: 10000 }, 1000);
     }
 
-    handleChange(event, suggest) {
+    handleChange(event, suggest, clearCompletions) {
         event.preventDefault()
-        this.setState({ value: event.target.value })
+        clearCompletions()
+        this.setState({ value: event.target.value})
         suggest(event.target.value)
     }
 
