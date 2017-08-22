@@ -5,7 +5,15 @@ const cheerio = require('cheerio')
 const isAmbiguous = ($) => Array.from($('#disambigbox')).length > 0
 
 const sanitize = (query) => (
-    axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
+    axios.get('https://en.wikipedia.org/w/api.php', {
+        params: {
+            action: 'query',
+            list: 'search',
+            srsearch: query,
+            format: 'json',
+            _: '1502826454683'
+        }
+    })
         // API handles fuzzy search queries
         .then(page => page.data.query.search[0].title)
 )
