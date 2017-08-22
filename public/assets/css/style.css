@@ -16,7 +16,6 @@ body {
 	background-size: cover;
 	background-position: center center;
 	overflow-x: hidden;
-	background-color: #010011;
 }
 
 /* START SUGGESTIONS DROPDOWN */
@@ -28,19 +27,18 @@ ul {
 	background: rgba(0, 0, 0, .5);
 	border: medium;
 	text-align: left;
-	width: 50%;
+	width: 52.9%;
 	padding-left: 0;
 }
 
 li {
 	font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
 	/* border-bottom: 1px solid #ccc; */
-	/* margin-left: 1.6em;n */
+	 margin-left: 1.6em;
 	list-style-type: none;
 	text-decoration: none;
 	font-weight: bold;
 	color: #ffffff;
-
 	-webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
 	-moz-transition: font-size 0.3s ease, background-color 0.3s ease;
 	-o-transition: font-size 0.3s ease, background-color 0.3s ease;
@@ -104,16 +102,16 @@ li:hover {
 .search-form input {
 	background: rgba(255, 255, 255, 0.5);
 	border: 2px solid #fff;
-	border-bottom-left-radius: 1em;
+	border-bottom-left-radius: 0;
 	border-top-left-radius: 1em;
-	border-bottom-right-radius: 1em;
+	border-bottom-right-radius: 0;
 	border-top-right-radius: 1em;
 	font-family: 'Oswald', sans-serif;
 	color: #11111D;
 	opacity: 1;
 	font-weight: lighter;
 	font-size: 1.3em;
-	line-height: 1.7;
+	line-height: 2;
 	height: inherit;
 	width: 50%;
 	padding-left: 1em;
