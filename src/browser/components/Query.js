@@ -37,7 +37,6 @@ class Query extends Component {
                             ))}
                         </ul>
                     </div>
-
                 </form>
             </div >
         )
@@ -48,6 +47,7 @@ class Query extends Component {
         search(this.state.value)
         clearCompletions()
         this.setState({ value: '' })
+        $("html, body").animate({ scrollTop: 10000 }, 1000);
     }
 
     handleChange(event, suggest, clearCompletions) {
