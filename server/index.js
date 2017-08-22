@@ -1,29 +1,24 @@
 'use strict'
 
 const express = require('express')
-const bodyParser = require('body-parser')
-const wikiScan = require('../src/data-gather/wiki')
-const suggest = require('../src/data-gather/suggestions')
-const app = express()
+const search = require('../src/data-gather/search')
+const suggest = require('../src/data-gather/suggest')
 const path = require('path')
 const port = 3000
+const app = express()
 
 app.use(express.static("public"))
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/query', (req, res, next) => {
-    wikiScan(req.body.query)
-        .then(concepts => {
-            res.json(concepts)
-        }).catch(next)
+app.get('/wiki', (req, res, next) => {
+    search(req.query.input)
+        .then(concepts => res.json(concepts))
+        .catch(next)
 })
 
-app.post('/suggest', (req, res, next) => {
-    suggest(req.body.key)
-        .then(suggestions => {
-            res.send(suggestions)
-        }).catch(next)
+app.get('/suggest', (req, res, next) => {
+    suggest(req.query.input)
+        .then(suggestions => res.send(suggestions))
+        .catch(next)
 })
 
 app.use('*', (req, res, next) => {

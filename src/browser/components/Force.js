@@ -1,42 +1,26 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { search } from '../redux/concepts'
-import { populate, init, update, simulate } from '../../d3/utils'
 import * as d3 from 'd3'
-import $ from 'jquery'
+import React from 'react'
+
+import { connect } from 'react-redux'
+import { search } from '../redux/graph'
+import { initialize, populate, draw } from '../redux/diagram'
+import { simulate } from '../../d3/utils'
 
 
+class Force extends React.Component {
+    componentDidMount() { createDiagram(this.props) }
+    componentDidUpdate() { updateDiagram(this.props) }
+    render() { return null }
+}
 
-const Force = ({ graph, search }) => {
-
-    if (Object.keys(graph).length) {
-
-
-        const [width, height, svg,
-            linkGroup, nodeGroup, textGroup,
-            linkForce, forces, dragDrop] = init(d3)
-
-        const [nodes, links] = populate(graph)
-        
-        const [linkElements, nodeElements, textElements] = update({
-            linkGroup,
-            nodeGroup,
-            textGroup,
-            nodes, 
-            links,
-            dragDrop, 
-            search
-        })
-
-        simulate(forces, nodeElements, textElements, linkElements, nodes, links, width, height)
-
-
-
-    }
-
+const createDiagram = ({ initialize }) => initialize(d3)
+const updateDiagram = ({ populate, draw, graph, diagram }) => {
+    populate(graph)
+    draw(diagram)
+    simulate(diagram)
     return null
 }
 
-const mapProps = store => ({ graph: store.graph })
-const mapDispatch = { search }
+const mapProps = ({ graph, diagram }) => ({ graph, diagram })
+const mapDispatch = { search, initialize, populate, draw }
 export default connect(mapProps, mapDispatch)(Force)

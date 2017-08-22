@@ -1,28 +1,31 @@
 import $ from 'jquery'
 
-export function populate(graph) {
+export function skeleton(graph) {
     const nodes = []
     const links = []
-    const dups = new Set()
 
-    graph.forEach(concept => dups.add(concept.name.toLowerCase()))
-
-    graph.forEach((concept, group) => {
-        const center = { id: concept.name.toLowerCase(), group, label: concept.name.toUpperCase(), level: 1 }
-        nodes.push(center)
-
-        concept.children.forEach(relation => {
-            const relationNormalized = relation.name.toLowerCase()
-            links.push({ target: center.id, source: relationNormalized, strength: 0.1 })
-
-            if (dups.has(relationNormalized)) return
-            else dups.add(relationNormalized)
-            nodes.push({ id: relationNormalized, group, label: relation.name, level: 2 })
+    Object.values(graph).forEach(node => {
+        const isParent = node.adj.length
+        if (isParent)
+            // if node has a non-empty adjacency list
+            // we capture links 
+            links.push(...node.adj.map(
+                // links for d3 require a special object
+                relatedNode => ({
+                    target: node.id,
+                    source: relatedNode.id,
+                    strength: 0.1
+                })
+            ))
+        // similiar story for nodes
+        nodes.push({
+            id: node.id, // will hash in future
+            label: node.id,
+            level: isParent ? 1 : 2
         })
-
     })
 
-    return [nodes, links]
+    return { nodes, links }
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -38,7 +41,45 @@ function domify(group, items, attributes, selection, tagFn) {
     return [entryPoint, elements]
 }
 
-export function simulate(simulation, nodeElements, textElements, linkElements, nodes, links, width, height) {
+export function rendering(diagram) {
+    let [linkEntry, linkElements] = domify(
+        diagram.linkGroup,
+        diagram.links,
+        { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
+        'line',
+        link => link.target.id + link.source.id
+    )
+
+    let [nodeEntry, nodeElements] = domify(
+        diagram.nodeGroup,
+        diagram.nodes,
+        { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
+        'circle',
+        node => node.id
+    )
+
+    nodeEntry.call(diagram.dragDrop)
+    nodeEntry.on('click', node => diagram.search(node.label))
+
+    let [textEntry, textElements] = domify(
+        diagram.textGroup,
+        diagram.nodes,
+        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
+        'text',
+        node => node.id
+    )
+
+    textEntry.text(node => node.label)
+
+    linkElements = linkEntry.merge(linkElements)
+    nodeElements = nodeEntry.merge(nodeElements)
+    textElements = textEntry.merge(textElements)
+
+    return { linkElements, nodeElements, textElements }
+}
+
+
+export function simulate({ simulation, nodeElements, textElements, linkElements, nodes, links, width, height }) {
 
     simulation.nodes(nodes).on('tick', () => {
         nodeElements
@@ -58,45 +99,7 @@ export function simulate(simulation, nodeElements, textElements, linkElements, n
     simulation.alphaTarget(0.7).restart()
 }
 
-export function update(view) {
-
-    let [linkEntry, linkElements] = domify(
-        view.linkGroup,
-        view.links,
-        { 'stroke-width': 1, 'stroke': 'rgba(234, 220, 233, 0.5)' },
-        'line',
-        link => link.target.id + link.source.id
-    )
-
-    let [nodeEntry, nodeElements] = domify(
-        view.nodeGroup,
-        view.nodes,
-        { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
-        'circle',
-        node => node.id
-    )
-
-    nodeEntry.call(view.dragDrop)
-    nodeEntry.on('click', node => view.search(node.label))
-
-    let [textEntry, textElements] = domify(
-        view.textGroup,
-        view.nodes,
-        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
-        'text',
-        node => node.id
-    )
-
-    textEntry.text(node => node.label)
-
-    linkElements = linkEntry.merge(linkElements)
-    nodeElements = nodeEntry.merge(nodeElements)
-    textElements = textEntry.merge(textElements)
-
-    return [linkElements, nodeElements, textElements]
-}
-
-export function init(d3) {
+export function diagram(d3) {
     const width = window.innerWidth
     const height = window.innerHeight
 
@@ -112,8 +115,8 @@ export function init(d3) {
     // simulation setup with all forces
     const linkForce = d3
         .forceLink()
-        .id(function (link) { return link.id })
-        .strength(function (link) { return link.strength })
+        .id(link => link.id)
+        .strength(link => link.strength)
         .distance(175)
 
     const simulation = d3
@@ -122,22 +125,23 @@ export function init(d3) {
         .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
-    const dragDrop = d3.drag().on('start', function (node) {
-        node.fx = node.x
-        node.fy = node.y
-    }).on('drag', function (node) {
-        simulation.alphaTarget(0.7).restart()
-        node.fx = d3.event.x
-        node.fy = d3.event.y
-    }).on('end', function (node) {
-        if (!d3.event.active) {
-            simulation.alphaTarget(0)
-        }
-        node.fx = null
-        node.fy = null
-    })
+    const dragDrop = d3.drag()
+        .on('start', node => {
+            node.fx = node.x
+            node.fy = node.y
+        }).on('drag', node => {
+            simulation.alphaTarget(0.7).restart()
+            node.fx = d3.event.x
+            node.fy = d3.event.y
+        }).on('end', node => {
+            if (!d3.event.active) {
+                simulation.alphaTarget(0)
+            }
+            node.fx = null
+            node.fy = null
+        })
 
-    return [
+    return {
         width,
         height,
         svg,
@@ -147,5 +151,5 @@ export function init(d3) {
         linkForce,
         simulation,
         dragDrop
-    ]
+    }
 }
