@@ -46,16 +46,14 @@ class Query extends Component {
         event.preventDefault()
         search(this.state.value)
         clearCompletions()
-        this.setState({ value: '' })
+        this.setState({ value: null })
         $("html, body").animate({ scrollTop: 10000 }, 1000);
     }
 
-    handleChange(event, suggest, clearCompletions) {
+    handleChange(event, suggest) {
         event.preventDefault()
         this.setState({ value: event.target.value })
-        this.state.value
-            ? suggest(this.state.value)
-            : clearCompletions()
+        suggest(event.target.value)
     }
 
     handleClick(value, clearCompletions) {
