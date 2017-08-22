@@ -1,5 +1,4 @@
-# atomizer
-## A Research Mind Mapping Tool
+# Atomizer - A Research Mind Mapping Tool
 
 ### Description:
 Users can make queries on any topic and a mind map of related Wikipedia
