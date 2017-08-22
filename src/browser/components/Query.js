@@ -33,7 +33,7 @@ class Query extends Component {
                         <ul display={this.state.value !== '' ? "inline-block" : "none"}>{
                             completions &&
                             completions.map((suggestion, index) => (
-                                <li key={index} onClick={(event) => this.handleClick(suggestion, search)}>{suggestion}</li>
+                                <li key={index} onClick={(event) => this.handleClick(suggestion, search, clearCompletions)}>{suggestion}</li>
                             ))}
                         </ul>
                     </div>
@@ -57,7 +57,7 @@ class Query extends Component {
             : clearCompletions()
     }
 
-    handleClick(suggestion, search) {
+    handleClick(suggestion, search, clearCompletions) {
         search(suggestion)
         this.setState({ value: '' })
         clearCompletions()
