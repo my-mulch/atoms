@@ -122,7 +122,7 @@ export function diagram(d3) {
     const simulation = d3
         .forceSimulation()
         .force('link', linkForce)
-        .force('charge', d3.forceManyBody().strength(-225).distanceMax(300))
+        .force('charge', d3.forceManyBody().strength(-150).distanceMax(250))
         .force('center', d3.forceCenter(width / 2, height / 2))
 
     const dragDrop = d3.drag()
