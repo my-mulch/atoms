@@ -4,13 +4,13 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { search } from '../redux/graph'
 import { initialize, populate, draw } from '../redux/diagram'
-import { simulate, feature, init } from '../../d3/utils'
+import { simulate, feature, creator } from '../../d3/utils'
 
 
 
 class Force extends React.Component {
     // componentDidMount() { createDiagram(this.props) }
-    componentDidUpdate() { console.log(this.props) }
+    componentDidUpdate() { }
 
     constructor() {
         super()
@@ -21,6 +21,7 @@ class Force extends React.Component {
             simulation: null,
             dragDrop: null
         }
+
     }
 
     render() {
@@ -38,9 +39,13 @@ class Force extends React.Component {
                 const textGroup = d3svg.append('g').attr('class', 'texts')
 
                 // simulation setup with all forces
-                this.setState({ linkForce: init(feature.LINK_FORCE) })
-                this.setState({ simulation: init(feature.SIMULATION) })
-                this.setState({ dragDrop: init(feature.DRAG_DROP) })
+                const initted = { width, height }
+                const init = creator.bind(initted)
+
+                initted.linkForce = init(feature.LINK_FORCE)
+                initted.simulation = init(feature.SIMULATION)
+                initted.dragDrop = init(feature.DRAG_DROP)
+                this.setState(initted)
             }} />
         )
     }
