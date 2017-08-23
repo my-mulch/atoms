@@ -47,7 +47,7 @@ export function draw() {
     let [nodeEntry, nodeElements] = domify(
         this.nodeGroup,
         this.nodes,
-        { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
+        { 'r': 10, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
         'circle',
         node => node.id
     )
@@ -59,7 +59,7 @@ export function draw() {
     let [textEntry, textElements] = domify(
         this.textGroup,
         this.nodes,
-        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
+        { 'font-size': 12, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
     )
