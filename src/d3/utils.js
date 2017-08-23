@@ -20,9 +20,6 @@ export function populate(graph) {
             level: 2
         })
     ))
-
-    console.log(this.nodes, this.links)
-
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -95,7 +92,6 @@ export function simulate() {
     this.simulation.force('link').links(this.links)
     this.simulation.alphaTarget(0.7).restart()
 }
-
 
 const LINK_FORCE = 'LINK_FORCE'
 const SIMULATION = 'SIMULATION'

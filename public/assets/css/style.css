@@ -1,3 +1,7 @@
+html {
+	font-size: 100%;
+}
+
 body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -23,20 +27,21 @@ ul {
 	background: rgba(0, 0, 0, .5);
 	border: medium;
 	text-align: left;
-	width: 50%;
+	width: 55.8%;
 	padding-left: 0;
-
+	border-bottom-left-radius: 1em;
+	border-bottom-right-radius: 1em;
 }
+
 
 li {
 	font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
 	/* border-bottom: 1px solid #ccc; */
-	/* margin-left: 1.6em;n */
+	margin-left: 1.6em;
 	list-style-type: none;
 	text-decoration: none;
 	font-weight: bold;
 	color: #ffffff;
-
 	-webkit-transition: font-size 0.3s ease, background-color 0.3s ease;
 	-moz-transition: font-size 0.3s ease, background-color 0.3s ease;
 	-o-transition: font-size 0.3s ease, background-color 0.3s ease;
@@ -44,8 +49,12 @@ li {
 	transition: font-size 0.3s ease, background-color 0.3s ease;
 }
 
+li:first-child {
+	padding-top: 3%;
+}
+
 li:last-child {
-	border: none;
+	padding-bottom: 3%;
 }
 
 li:hover {
@@ -98,21 +107,28 @@ li:hover {
 }
 
 .search-form input {
-	background: rgba(255, 255, 255, 0.5);
+	background-color: rgba(300, 300, 300, .5);
+
+	background-image: url('../img/search-icon-white.png');
+	background-repeat: no-repeat;
+	background-size: 3.5%;
+	background-position: 2%;
+
 	border: 2px solid #fff;
-	border-bottom-left-radius: 1em;
+	border-bottom-left-radius: 0;
 	border-top-left-radius: 1em;
-	border-bottom-right-radius: 1em;
+	border-bottom-right-radius: 0;
 	border-top-right-radius: 1em;
-	font-family: 'Oswald', sans-serif;
-	color: #11111D;
-	opacity: 1;
-	font-weight: lighter;
+
+	font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+	font-weight: bold;
 	font-size: 1.3em;
-	line-height: 1.7;
+	line-height: 2;
 	height: inherit;
 	width: 50%;
-	padding-left: 1em;
+	text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+
+	padding-left: 2.5em;
 	padding-right: 1em;
 }
 
@@ -128,13 +144,111 @@ input:focus {
 
 h1 {
 	font-family: 'Montserrat', sans-serif;
-	font-size: 9em;
+	font-size: 12em;
 	color: #ffffff;
 	margin-top: 0.1em;
 	margin-bottom: 0;
 	text-align: center;
 	line-height: 1;
-	text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
+	text-shadow: 3px 3px 3px rgba(150, 150, 150, 1);
 }
 
+h2 {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 1.2em;
+	color: #ffffff;
+	margin-top: 0;
+	margin-bottom: 0.6em;
+	font-weight: 700;
+}
 
+#svg-container {
+	background-color: black;
+}
+
+.input-group {
+	margin-bottom: 40em;
+}
+
+@media all and (max-width:767px) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1024px) and (min-width:768px) and (orientation: landscape) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1024px) and (min-width:768px) and (orientation: portrait) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1200px) and (min-width:1024px) {
+	body {
+		font-size: 85% !important;
+	}
+}
+
+@media all and (max-width:1366px) and (min-width:1200px) {
+	body {
+		font-size: 100% !important;
+	}
+}
+
+@media all and (max-width:1440px) and (min-width:1366px) {
+	body {
+		font-size: 105% !important;
+	}
+}
+
+@media all and (max-width:1680px) and (min-width:1440px) {
+	body {
+		font-size: 115% !important;
+	}
+}
+
+@media all and (max-width:1920px) and (min-width:1680px) {
+	body {
+		font-size: 140% !important;
+	}
+}
+
+@media all and (max-width:2048px) and (min-width:1920px) {
+	body {
+		font-size: 145% !important;
+	}
+}
+
+@media all and (max-width:2560px) and (min-width:2048px) {
+	body {
+		font-size: 155% !important;
+	}
+}
+
+@media all and (max-width:2880px) and (min-width:2560px) {
+	body {
+		font-size: 165% !important;
+	}
+}
+
+@media only screen and (min-width: 768px) {
+	html {
+		height: 100%;
+	}
+	h1 {
+		margin-top: 0.3em;
+		font-size: 13em;
+	}
+	h2 {
+		font-size: 2em;
+		margin-bottom: 1.2em;
+	}
+	.form-inline.search-form .input-group {
+		width: 100%;
+	}
+}

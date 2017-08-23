@@ -5,7 +5,15 @@ const cheerio = require('cheerio')
 const isAmbiguous = ($) => Array.from($('#disambigbox')).length > 0
 
 const sanitize = (query) => (
-    axios.get(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&_=1502826454683`)
+    axios.get('https://en.wikipedia.org/w/api.php', {
+        params: {
+            action: 'query',
+            list: 'search',
+            srsearch: query,
+            format: 'json',
+            _: '1502826454683'
+        }
+    })
         // API handles fuzzy search queries
         .then(page => page.data.query.search[0].title)
 )
@@ -23,7 +31,7 @@ const relate = (query) => (
                     return bundle(article,
                         isAmbiguous($)
                             // if article is ambigous return possibilites
-                            ? disambiguate($)
+                            ? disambiguate($).slice(0, 8)
                             // otherwise return related articles
                             : rank(relations($), html))
                 })
@@ -36,23 +44,28 @@ const bundle = (article, relations) => ({
     relations: relations
 })
 
-// rank by occurence count in surrounding html
+// rank by occurrence count in surrounding html
 const rank = (relations, html) =>
+    // sanitizeLinks(relations.sort((a, b) => occurrences(html, b) - occurrences(html, a)))
     relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
-        .slice(0, 8)
 
 const relations = ($) => grabLinks($, 'p')
+// const disambiguate = ($) => sanitizeLinks(grabLinks($, '#content ul'))
 const disambiguate = ($) => grabLinks($, '#content ul')
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
     const links = new Set()
     $(context).find('a').map((_, atag) => {
-        if (atag.attribs.title)
+        if (allowableTitle(atag.attribs.title))
             links.add(atag.attribs.title)
     })
     return Array.from(links)
 }
+
+// filters non-informational links, eg. help pages
+// slices results down to top 8
+const allowableTitle = (title) => title && !(/#|Help:/g).test(title)
 
 const occurrences = (text, target) => {
     if (!(target && target.length)) return 0

@@ -6,6 +6,7 @@ import { search } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
 
+import Modal from './Modal'
 
 class Force extends React.Component {
 
@@ -14,7 +15,6 @@ class Force extends React.Component {
         this.draw()
         this.simulate()
     }
-
 
     componentDidMount() {
         this.width = window.innerWidth
@@ -45,7 +45,6 @@ class Force extends React.Component {
 
     render() { return null }
 }
-
 
 const mapProps = ({ graph }) => ({ graph })
 const mapDispatch = { search }
