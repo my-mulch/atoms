@@ -49,8 +49,8 @@ const rank = (relations, html) =>
     relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
         .slice(0, 8)
 
-const relations = ($) => grabLinks($, 'p').slice(0, 8)
-const disambiguate = ($) => grabLinks($, '#content ul')
+const relations = ($) => grabLinks($, 'p')
+const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 8)
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
