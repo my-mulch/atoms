@@ -1,22 +1,11 @@
 const axios = require('axios')
 const cheerio = require('cheerio')
+const wikiApi = require('./utils')
 
 // div indicating ambiguous query. If array is empty, query was non-ambigous
 const isAmbiguous = ($) => Array.from($('#disambigbox')).length > 0
-
-const sanitize = (query) => (
-    axios.get('https://en.wikipedia.org/w/api.php', {
-        params: {
-            action: 'query',
-            list: 'search',
-            srsearch: query,
-            format: 'json',
-            _: '1502826454683'
-        }
-    })
-        // API handles fuzzy search queries
-        .then(page => page.data.query.search[0].title)
-)
+// API handles fuzzy search queries
+const sanitize = (query) => wikiApi(query, page => page.data.query.search[0].title)
 
 const relate = (query) => (
     sanitize(query.replace(' ', '+'))
@@ -50,7 +39,7 @@ const rank = (relations, html) =>
         .slice(0, 8)
 
 const relations = ($) => grabLinks($, 'p')
-const disambiguate = ($) => grabLinks($, '#content ul')
+const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 8)
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
@@ -62,10 +51,7 @@ const grabLinks = ($, context) => {
     return Array.from(links)
 }
 
-// filters non-informational links, eg. help pages
 // slices results down to top 8
-// const allowableTitle = (title) => title && !(/#|Help:/g).test(title)
-
 const occurrences = (text, target) => {
     if (!(target && target.length)) return 0
 
