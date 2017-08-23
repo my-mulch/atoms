@@ -2,13 +2,18 @@ import * as d3 from 'd3'
 import React from 'react'
 
 import { connect } from 'react-redux'
-import { search } from '../redux/graph'
+import { search, clear } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
 
 
 import Modal from './Modal'
 
 class Force extends React.Component {
+
+    constructor() {
+        super()
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
 
     componentDidUpdate() {
         this.populate(this.props.graph)
@@ -43,9 +48,22 @@ class Force extends React.Component {
         this.links = []
     }
 
-    render() { return null }
+    handleSubmit(event) {
+        event.preventDefault()
+        this.nodes = []
+        this.links = []
+        this.props.clear()
+    }
+
+    render() { 
+        return (
+            <form onSubmit={event => this.handleSubmit(event)}>
+                <button type="submit">Clear Now</button>
+            </form>
+        ) 
+    }
 }
 
 const mapProps = ({ graph }) => ({ graph })
-const mapDispatch = { search }
+const mapDispatch = { search, clear }
 export default connect(mapProps, mapDispatch)(Force)

@@ -5,7 +5,7 @@ const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
 const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
 
 const update = parentNode => ({ type: UPDATE, parentNode })
-const clear = _ => ({ type: CLEAR })
+export const clear = _ => ({ type: CLEAR })
 
 const initialState = {
     // total graph
@@ -28,7 +28,7 @@ const reducer = (graph = initialState, action) => {
             const newGraph = Object.assign(
                 {},
                 graph, // make a copy of graph to avoid mutation of reducer state
-                { updated: { links: {}, nodes: {}, parent: null } }) // clear updated links/nodes 
+                { updated: { links: [], nodes: {}, parent: null } }) // clear updated links/nodes 
             // find or create with new graph as 'this' context
             const findOrCreate = foc.bind(newGraph)
             // find/create the root node
