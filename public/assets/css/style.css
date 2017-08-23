@@ -187,11 +187,17 @@ h2 {
 	body {
 		font-size: 100% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:1024px) and (min-width:768px) and (orientation: landscape) {
 	body {
 		font-size: 100% !important;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
 
@@ -199,11 +205,17 @@ h2 {
 	body {
 		font-size: 100% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:1200px) and (min-width:1024px) {
 	body {
 		font-size: 85% !important;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
 
@@ -211,11 +223,17 @@ h2 {
 	body {
 		font-size: 100% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:1440px) and (min-width:1366px) {
 	body {
 		font-size: 105% !important;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
 
@@ -223,11 +241,17 @@ h2 {
 	body {
 		font-size: 115% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:1920px) and (min-width:1680px) {
 	body {
 		font-size: 140% !important;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
 
@@ -235,17 +259,26 @@ h2 {
 	body {
 		font-size: 145% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:2560px) and (min-width:2048px) {
 	body {
 		font-size: 155% !important;
 	}
+	.forceArea {
+		padding-top: 3em;
+	}
 }
 
 @media all and (max-width:2880px) and (min-width:2560px) {
 	body {
 		font-size: 165% !important;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
 
@@ -263,5 +296,8 @@ h2 {
 	}
 	.form-inline.search-form .input-group {
 		width: 100%;
+	}
+	.forceArea {
+		padding-top: 3em;
 	}
 }
