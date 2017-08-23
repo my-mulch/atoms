@@ -56,12 +56,12 @@ class Force extends React.Component {
         this.props.clear()
     }
 
-    render() { 
+    render() {
         return (
-            <form onSubmit={event => this.handleSubmit(event)}>
+            Object.keys(this.props.graph.updated.nodes).length ? <form onSubmit={event => this.handleSubmit(event)}>
                 <button type="submit">Clear Now</button>
-            </form>
-        ) 
+            </form> : null
+        )
     }
 }
 
