@@ -54,6 +54,7 @@ class Force extends React.Component {
         this.nodes = []
         this.links = []
         this.props.clear()
+        $("html, body").animate({ scrollTop: 0 }, 500);
     }
 
     render() {
