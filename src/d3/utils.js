@@ -3,23 +3,23 @@ import * as d3 from 'd3'
 
 export function populate(graph) {
 
-    this.links.push(...graph.updated.links.map(
-        // links for d3 require special form
-        source => ({
-            target: graph.updated.parent.id,
-            source: source.id,
-            strength: 0.1
-        })
-    ))
-
-    this.nodes.push(...Object.values(graph.updated.nodes).map(
-        // nodes for d3 require special form
-        node => ({
-            id: node.id,
-            label: node.id,
-            level: 2
-        })
-    ))
+        this.links.push(...graph.updated.links.map(
+            // links for d3 require special form
+            source => ({
+                target: graph.updated.parent.id,
+                source: source.id,
+                strength: 0.1
+            })
+        ))
+        
+        this.nodes.push(...Object.values(graph.updated.nodes).map(
+            // nodes for d3 require special form
+            node => ({
+                id: node.id,
+                label: node.id,
+                level: 2
+            })
+        ))
 }
 
 function domify(group, items, attributes, selection, tagFn) {

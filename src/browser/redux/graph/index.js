@@ -2,8 +2,10 @@ import axios from "axios"
 import foc from './utils' // findOrCreate
 
 const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
+const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
 
 const update = parentNode => ({ type: UPDATE, parentNode })
+export const clear = _ => ({ type: CLEAR })
 
 const initialState = {
     // total graph
@@ -13,7 +15,7 @@ const initialState = {
         // the source of new links
         parent: null,
         // the links of the updated group
-        links: {},
+        links: [],
         // and the nodes
         nodes: {}
     }
@@ -26,7 +28,7 @@ const reducer = (graph = initialState, action) => {
             const newGraph = Object.assign(
                 {},
                 graph, // make a copy of graph to avoid mutation of reducer state
-                { updated: { links: {}, nodes: {}, parent: null } }) // clear updated links/nodes 
+                { updated: { links: [], nodes: {}, parent: null } }) // clear updated links/nodes 
             // find or create with new graph as 'this' context
             const findOrCreate = foc.bind(newGraph)
             // find/create the root node
@@ -36,6 +38,8 @@ const reducer = (graph = initialState, action) => {
             newGraph.updated.parent = parent
 
             return newGraph
+        case CLEAR:
+            return initialState
     }
     return graph
 }
