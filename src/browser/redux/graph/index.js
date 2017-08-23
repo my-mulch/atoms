@@ -15,7 +15,7 @@ const initialState = {
         // the source of new links
         parent: null,
         // the links of the updated group
-        links: {},
+        links: [],
         // and the nodes
         nodes: {}
     }
