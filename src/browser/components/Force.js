@@ -17,6 +17,7 @@ class Force extends React.Component {
     }
 
     componentDidMount() {
+        console.log('MOUNTING')
         this.width = window.innerWidth
         this.height = window.innerHeight
 

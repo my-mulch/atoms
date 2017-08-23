@@ -31,7 +31,7 @@ const relate = (query) => (
                     return bundle(article,
                         isAmbiguous($)
                             // if article is ambigous return possibilites
-                            ? disambiguate($).slice(0, 8)
+                            ? disambiguate($)
                             // otherwise return related articles
                             : rank(relations($), html))
                 })
@@ -46,11 +46,10 @@ const bundle = (article, relations) => ({
 
 // rank by occurrence count in surrounding html
 const rank = (relations, html) =>
-    // sanitizeLinks(relations.sort((a, b) => occurrences(html, b) - occurrences(html, a)))
     relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
+        .slice(0, 8)
 
-const relations = ($) => grabLinks($, 'p')
-// const disambiguate = ($) => sanitizeLinks(grabLinks($, '#content ul'))
+const relations = ($) => grabLinks($, 'p').slice(0, 8)
 const disambiguate = ($) => grabLinks($, '#content ul')
 
 // finds atags in a given context
