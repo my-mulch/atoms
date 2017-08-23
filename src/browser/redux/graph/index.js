@@ -2,8 +2,10 @@ import axios from "axios"
 import foc from './utils' // findOrCreate
 
 const UPDATE = 'UPDATE_KNOWLEDGE_GRAPH';
+const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
 
 const update = parentNode => ({ type: UPDATE, parentNode })
+const clear = _ => ({ type: CLEAR })
 
 const initialState = {
     // total graph
@@ -36,6 +38,8 @@ const reducer = (graph = initialState, action) => {
             newGraph.updated.parent = parent
 
             return newGraph
+        case CLEAR:
+            return initialState
     }
     return graph
 }
