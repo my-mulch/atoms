@@ -7,7 +7,7 @@ const CLEAR = 'CLEAR_KNOWLEDGE_GRAPH'
 const update = parentNode => ({ type: UPDATE, parentNode })
 export const clear = _ => ({ type: CLEAR })
 
-const initialState = {
+const initialState = () => ({
     // total graph
     all: {},
     // new nodes to be updated based on query
@@ -19,9 +19,9 @@ const initialState = {
         // and the nodes
         nodes: {}
     }
-}
+})
 
-const reducer = (graph = initialState, action) => {
+const reducer = (graph = initialState(), action) => {
 
     switch (action.type) {
         case UPDATE:
@@ -39,7 +39,7 @@ const reducer = (graph = initialState, action) => {
 
             return newGraph
         case CLEAR:
-            return initialState
+            return initialState()
     }
     return graph
 }
