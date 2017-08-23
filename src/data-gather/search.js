@@ -49,14 +49,14 @@ const rank = (relations, html) =>
     relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
         .slice(0, 8)
 
-const relations = ($) => grabLinks($, 'p').slice(0, 8)
+const relations = ($) => grabLinks($, 'p')
 const disambiguate = ($) => grabLinks($, '#content ul')
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
     const links = new Set()
     $(context).find('a').map((_, atag) => {
-        if (allowableTitle(atag.attribs.title))
+        if (atag.attribs.title)
             links.add(atag.attribs.title)
     })
     return Array.from(links)
@@ -64,7 +64,7 @@ const grabLinks = ($, context) => {
 
 // filters non-informational links, eg. help pages
 // slices results down to top 8
-const allowableTitle = (title) => title && !(/#|Help:/g).test(title)
+// const allowableTitle = (title) => title && !(/#|Help:/g).test(title)
 
 const occurrences = (text, target) => {
     if (!(target && target.length)) return 0

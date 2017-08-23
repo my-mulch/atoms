@@ -47,19 +47,18 @@ export function draw() {
     let [nodeEntry, nodeElements] = domify(
         this.nodeGroup,
         this.nodes,
-        { 'r': 14, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
+        { 'r': 10, 'fill': node => node.level === 1 ? '#F9D463' : '#7084a3' },
         'circle',
         node => node.id
     )
 
     nodeEntry.call(this.dragDrop)
     nodeEntry.on('click', node => this.search(node.label))
-    nodeEntry.on('hover', console.log)
 
     let [textEntry, textElements] = domify(
         this.textGroup,
         this.nodes,
-        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
+        { 'font-size': 10, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
     )
@@ -110,12 +109,12 @@ export function init(feature) {
             return d3.forceLink()
                 .id(link => link.id)
                 .strength(link => link.strength)
-                .distance(175)
+                .distance(75)
 
         case SIMULATION:
             return d3.forceSimulation()
                 .force('link', this.linkForce)
-                .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
+                .force('charge', d3.forceManyBody().strength(-100).distanceMax(300))
                 .force('center', d3.forceCenter(this.width / 2, this.height / 2))
 
         case DRAG_DROP:
