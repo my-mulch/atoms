@@ -35,11 +35,14 @@ const bundle = (article, relations) => ({
 
 // rank by occurrence count in surrounding html
 const rank = (relations, html) =>
-    relations.sort((a, b) => occurrences(html, b) - occurrences(html, a))
+    filter(relations.sort((a, b) => occurrences(html, b) - occurrences(html, a)))
         .slice(0, 8)
 
 const relations = ($) => grabLinks($, 'p')
-const disambiguate = ($) => grabLinks($, '#content ul').slice(0, 8)
+const disambiguate = ($) => filter(grabLinks($, '#content ul')).slice(0, 8)
+
+// filter help and citation pages
+const filter = (links) => links.filter(link => !link.includes(':'))
 
 // finds atags in a given context
 const grabLinks = ($, context) => {
