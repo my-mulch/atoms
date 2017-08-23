@@ -11,7 +11,7 @@ export function populate(graph) {
                 strength: 0.1
             })
         ))
-        
+
         this.nodes.push(...Object.values(graph.updated.nodes).map(
             // nodes for d3 require special form
             node => ({
@@ -58,7 +58,7 @@ export function draw() {
     let [textEntry, textElements] = domify(
         this.textGroup,
         this.nodes,
-        { 'font-size': 10, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
+        { 'font-size': 13, 'dx': 7, 'dy': -10, 'fill': 'white', 'font-weight': 'bold' },
         'text',
         node => node.id
     )
