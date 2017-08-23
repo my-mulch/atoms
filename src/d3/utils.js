@@ -3,26 +3,26 @@ import * as d3 from 'd3'
 
 export function populate(graph) {
 
-    Object.values(graph.updated).forEach(node => {
-        const isParent = node.adj.length
-        if (isParent)
-            // if node has a non-empty adjacency list
-            // we capture links 
-            this.links.push(...node.adj.map(
-                // links for d3 require a special object
-                relatedNode => ({
-                    target: node.id,
-                    source: relatedNode.id,
-                    strength: 0.1
-                })
-            ))
-        // similiar story for nodes
-        this.nodes.push({
-            id: node.id, // will hash in future
-            label: node.id,
-            level: isParent ? 1 : 2
+    this.links.push(...graph.updated.links.map(
+        // links for d3 require special form
+        source => ({
+            target: graph.updated.parent.id,
+            source: source.id,
+            strength: 0.1
         })
-    })
+    ))
+
+    this.nodes.push(...Object.values(graph.updated.nodes).map(
+        // nodes for d3 require special form
+        node => ({
+            id: node.id,
+            label: node.id,
+            level: 2
+        })
+    ))
+
+    console.log(this.nodes, this.links)
+
 }
 
 function domify(group, items, attributes, selection, tagFn) {
@@ -108,7 +108,7 @@ export const feature = {
 }
 
 
-export function init (feature) {
+export function init(feature) {
     switch (feature) {
         case LINK_FORCE:
             return d3.forceLink()
@@ -121,7 +121,7 @@ export function init (feature) {
                 .force('link', this.linkForce)
                 .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
                 .force('center', d3.forceCenter(this.width / 2, this.height / 2))
-        
+
         case DRAG_DROP:
             return d3.drag()
                 .on('start', node => {
