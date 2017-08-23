@@ -3,8 +3,8 @@ import Splash from './Splash'
 import Force from './Force'
 
 export default () => (
-    <div className="wrapper" id="wrapper-large">
-        <div className="container-fluid">
+    <div>
+        <div>
             <Splash />
         </div>
         <div className="forceArea">
