@@ -110,12 +110,12 @@ export function init(feature) {
             return d3.forceLink()
                 .id(link => link.id)
                 .strength(link => link.strength)
-                .distance(175)
+                .distance(75)
 
         case SIMULATION:
             return d3.forceSimulation()
                 .force('link', this.linkForce)
-                .force('charge', d3.forceManyBody().strength(-225).distanceMax(500))
+                .force('charge', d3.forceManyBody().strength(-100).distanceMax(300))
                 .force('center', d3.forceCenter(this.width / 2, this.height / 2))
 
         case DRAG_DROP:

@@ -64,7 +64,7 @@ const grabLinks = ($, context) => {
 
 // filters non-informational links, eg. help pages
 // slices results down to top 8
-const allowableTitle = (title) => title && !(/#|Help:/g).test(title)
+const allowableTitle = (title) => title && !(/#|Help:|Wikipedia:/g).test(title)
 
 const occurrences = (text, target) => {
     if (!(target && target.length)) return 0
