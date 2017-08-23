@@ -1,10 +1,10 @@
 import * as d3 from 'd3'
 import React from 'react'
+import $ from 'jquery'
 
 import { connect } from 'react-redux'
 import { search, clear } from '../redux/graph'
 import { simulate, feature, init, draw, populate } from '../../d3/utils'
-
 
 import Modal from './Modal'
 
@@ -24,7 +24,7 @@ class Force extends React.Component {
     componentDidMount() {
         console.log('MOUNTING')
         this.width = window.innerWidth
-        this.height = window.innerHeight
+        this.height = window.innerHeight * 0.93
 
         this.svg = d3.select('svg')
         this.svg.attr('width', this.width).attr('height', this.height)
