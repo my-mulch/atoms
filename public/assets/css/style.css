@@ -168,6 +168,12 @@ h2 {
 
 .input-group {
 	margin-bottom: 40em;
+	/* position:fixed; */
+	/* z-index:100; */
+	/* width:337px; */
+	/* background-color:white; */
+	/* padding:10px; */
+	
 }
 
 .button {
