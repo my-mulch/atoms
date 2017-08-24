@@ -4,7 +4,7 @@ const express = require('express')
 const search = require('../src/data-gather/search')
 const suggest = require('../src/data-gather/suggest')
 const path = require('path')
-const port = 3000
+const port = process.env.PORT || 3000
 const app = express()
 
 app.use(express.static("public"))
